@@ -3,6 +3,9 @@
 //
 // Author: dingcongjun (dingcj)
 
+#ifndef POPPY_VIDEO_FRAMEBUFFERMEM_H
+#define POPPY_VIDEO_FRAMEBUFFERMEM_H
+
 #include <stdlib.h>
 #include "FrameBuffer.h"
 
@@ -23,4 +26,6 @@ class FrameBufferOfMem: public FrameBuffer
 };
 
 }
+
+#endif
 

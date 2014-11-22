@@ -1,7 +1,7 @@
-TARGET=puppyTest.exe
+TARGET=poppyTest.exe
 CPP=g++
 
-SRCS=video/FrameBuffer.cc video/FrameBufferOfMem.cc poppy.cc
+SRCS=video/FrameBuffer.cc video/FrameBufferOfMem.cc video/Bitmap.cc poppy.cc
 OBJS=$(patsubst %.cc, %.o, $(SRCS))
 
 $(TARGET): $(OBJS)
