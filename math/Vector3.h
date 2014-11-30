@@ -51,7 +51,7 @@ class Vector3
       return *this;
     }
 
-    Vector3 operator -() const { Vector3(-x_, -y_, -z_); }
+    Vector3 operator -() const { return Vector3(-x_, -y_, -z_); }
 
     Vector3 operator *(float a) const
     {
@@ -102,14 +102,14 @@ inline bool operator !=(const Vector3 &lhs, const Vector3 &rhs)
 
 inline Vector3 operator +(const Vector3& lhs, const Vector3& rhs)
 {
-  Vector3(lhs.x_ + rhs.x_, lhs.y_ + rhs.y_,
-      lhs.z_ + rhs.z_);
+  return Vector3(lhs.x_ + rhs.x_, lhs.y_ + rhs.y_,
+            lhs.z_ + rhs.z_);
 }
 
 inline Vector3 operator -(const Vector3& lhs, const Vector3& rhs)
 {
-  Vector3(lhs.x_ - rhs.x_, lhs.y_ - rhs.y_,
-      lhs.z_ - rhs.z_);
+  return Vector3(lhs.x_ - rhs.x_, lhs.y_ - rhs.y_,
+          lhs.z_ - rhs.z_);
 }
 
 inline float operator *(const Vector3& lhs, const Vector3& rhs)

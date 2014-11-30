@@ -1,5 +1,7 @@
 TARGET=poppyTest.exe
 CPP=g++
+CFLAGS= -g -Wall
+LFLAGS=-lmingw32 -lSDLmain -lSDL
 
 SRCS=video/FrameBuffer.cc video/Bitmap.cc \
 		 logger/Logger.cc math/Vector3.cc \
@@ -7,10 +9,10 @@ SRCS=video/FrameBuffer.cc video/Bitmap.cc \
 OBJS=$(patsubst %.cc, %.o, $(SRCS))
 
 $(TARGET): $(OBJS)
-	$(CPP) -o $@ $^
+	$(CPP) $^ -o $@ $(LFLAGS)
 
 %.o: %.cc
-	$(CPP) -c -g -o $@ $^
+	$(CPP) -c $(CFLAGS) -o $@ $^
 
 clean:
 	rm -rf $(TARGET) $(OBJS)

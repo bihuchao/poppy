@@ -25,7 +25,7 @@ int Bitmap::loadFromBmpFile(const char *filename)
 
   std::tr1::shared_ptr<FILE> filePtr(fp, ::fclose);
 
-  int ret = ::fread(&fileHeader, 1, sizeof(BitmapFileHeader), fp);
+  size_t ret = ::fread(&fileHeader, 1, sizeof(BitmapFileHeader), fp);
   if (ret != sizeof(BitmapFileHeader) || fileHeader.type != kBmpFileMagic)
   {
     return -1; 
@@ -75,7 +75,7 @@ int Bitmap::storeToBmpFile(const char *filename)
 
   std::tr1::shared_ptr<FILE> filePtr(fp, ::fclose);
 
-  int ret = ::fwrite(&fileHeader, 1, sizeof(BitmapFileHeader), fp);
+  size_t ret = ::fwrite(&fileHeader, 1, sizeof(BitmapFileHeader), fp);
   if (ret != sizeof(BitmapFileHeader))
   {
     return -1; 
