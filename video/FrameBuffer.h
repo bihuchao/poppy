@@ -48,6 +48,18 @@ class FrameBuffer
             int y, int pitch, int sizepix);
     static void putPixelCommon(uint8_t *buffer, int x, int y,
             int pitch, int sizepix, uint32_t pixel);
+
+    static uint32_t getPointPosition(int x, int y, int w, int h);
+    static uint32_t getClipedLinePoint(int w, int h, uint32_t pos,
+        int ox, int oy, int *px, int *py);
+    static int clipLine(int w, int h, int *px1, int *py1, 
+        int *px2, int *py2);
+
+    const static uint32_t kClipCodeC = 0x00;
+    const static uint32_t kClipCodeN = 0x08;
+    const static uint32_t kClipCodeS = 0x04;
+    const static uint32_t kClipCodeE = 0x02;
+    const static uint32_t kClipCodeW = 0x01;
   private:
     int32_t width_;
     int32_t height_;

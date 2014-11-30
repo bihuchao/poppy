@@ -69,5 +69,67 @@ void FrameBuffer::putPixelCommon(uint8_t *buffer, int x, int y,
   return;
 }
 
+uint32_t FrameBuffer::getPointPosition(int x, int y, int w, int h)
+{
+  uint32_t position = 0u;
+  int maxX = w - 1;
+  int maxY = h - 1;
+
+  if (y < 0)
+  {
+    position |= kClipCodeN;
+  }
+  else if (y > maxY)
+  {
+    position |= kClipCodeS; 
+  }
+  else if (x < 0)
+  {
+    position |= kClipCodeW; 
+  }
+  else if (x > maxX)
+  {
+    position |= kClipCodeE; 
+  }
+  
+  return position;
+}
+
+uint32_t FrameBuffer::getClipedLinePoint(int w, int h, 
+    uint32_t pos, int ox, int oy, int *px, int *py)
+{
+  switch (pos)
+  {
+    case kClipCodeC: 
+      break;
+    case kClipCodeN:
+      break;
+  }
+
+  return 0;
+}
+
+int FrameBuffer::clipLine(int w, int h, int *px1, int *py1,
+        int *px2, int *py2)
+{
+  uint32_t p1Code = getPointPosition(*px1, *py1, w, h);
+  uint32_t p2Code = getPointPosition(*px2, *py2, w, h);
+
+  //两个点的连线不经过窗口
+  if (p1Code & p2Code)
+  {
+    return 0; 
+  }
+
+  //两个点都在窗口内部
+  if (p1Code == kClipCodeC && p2Code == kClipCodeC)
+  {
+    return 1; 
+  }
+
+
+  return 1;
+}
+
 }
 
