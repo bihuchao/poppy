@@ -1,10 +1,11 @@
 TARGET=poppyTest.exe
 CPP=g++
-CFLAGS= -g -Wall
+CFLAGS= -g -Wall -I./logger -I./video
 LFLAGS=-lmingw32 -lSDLmain -lSDL
 
 SRCS=video/FrameBuffer.cc video/Bitmap.cc \
 		 logger/Logger.cc math/Vector3.cc \
+		 video/FrameBufferSDL.cc \
 		 poppy.cc
 OBJS=$(patsubst %.cc, %.o, $(SRCS))
 
@@ -15,4 +16,4 @@ $(TARGET): $(OBJS)
 	$(CPP) -c $(CFLAGS) -o $@ $^
 
 clean:
-	rm -rf $(TARGET) $(OBJS)
+	rm -rf $(TARGET) $(OBJS) stderr.txt stdout.txt
