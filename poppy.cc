@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "video/FrameBufferOfMem.h"
 #include "video/Bitmap.h"
 #include "logger/Logger.h"
 
