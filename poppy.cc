@@ -13,6 +13,7 @@ using namespace poppy;
 int main(int argc, char *argv[])
 {
   SDL_Init(SDL_INIT_EVERYTHING);
+  //setLogLevel(INFO);
 
   SDL_Surface *screen = SDL_SetVideoMode(640, 480, 32, SDL_SWSURFACE);
 
@@ -31,8 +32,19 @@ int main(int argc, char *argv[])
   sdlFrameBuf.putPixel(buf, x, y, yellow);
   sdlFrameBuf.unlockFrameBuffer(buf);
 
+  //handing event
+  SDL_Event event;
+  while (SDL_WaitEvent(&event)) 
+  {
+    LOG_INFO("Get a event: %d\n", event.type);
+    if (event.type == SDL_QUIT) 
+    {
+      LOG_INFO("Break from event loop!\n");
+      break;
+    }
+  }
+
   SDL_Quit();
-  SDL_Delay(20000);
 
   return 0;
 }
