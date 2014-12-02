@@ -6,6 +6,8 @@
 #ifndef POPPY_LOGGER_LOGGER_H
 #define POPPY_LOGGER_LOGGER_H
 
+#include <stdio.h>
+
 namespace poppy
 {
 

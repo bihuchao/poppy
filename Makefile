@@ -6,6 +6,7 @@ LFLAGS=-lmingw32 -lSDLmain -lSDL
 SRCS=video/FrameBuffer.cc video/Bitmap.cc \
 		 logger/Logger.cc math/Vector3.cc \
 		 video/FrameBufferSDL.cc \
+		 video/VideoSystem.cc \
 		 poppy.cc
 OBJS=$(patsubst %.cc, %.o, $(SRCS))
 
