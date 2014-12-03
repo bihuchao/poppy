@@ -56,5 +56,22 @@ int FrameBufferSDL::unlockFrameBuffer(uint8_t *buffer)
   return 0;
 }
 
+int FrameBufferSDL::fill(uint32_t color)
+{
+  SDL_Rect rect;
+  rect.x = 0;
+  rect.y = 0;
+  rect.w = surface_->w;
+  rect.h = surface_->h;
+
+  int ret = SDL_FillRect(surface_, &rect, color);
+  if (primary_)
+  {
+    SDL_Flip(surface_); 
+  }
+
+  return ret;
+}
+
 }
 

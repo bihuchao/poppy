@@ -31,6 +31,9 @@ int main(int argc, char *argv[])
   sdlFrameBuf.lockFrameBuffer(&buf, &pitch);
   sdlFrameBuf.putPixel(buf, x, y, yellow);
   sdlFrameBuf.unlockFrameBuffer(buf);
+  
+  sdlFrameBuf.fill(yellow);
+  //SDL_Flip(screen);
 
   //handing event
   SDL_Event event;

@@ -34,6 +34,7 @@ class FrameBuffer
     virtual ~FrameBuffer() { }
     virtual int lockFrameBuffer(uint8_t **pbuffer, int *ppitch) = 0;
     virtual int unlockFrameBuffer(uint8_t *buffer) = 0;
+    virtual int fill(uint32_t color) = 0;
     
     uint32_t getPixel(uint8_t *buf, int x, int y)
     {
