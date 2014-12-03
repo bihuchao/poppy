@@ -19,35 +19,40 @@ class VideoSystem
     VideoSystem()
       :primary_(NULL),
       secondary_(NULL),
+      width_(0), height_(0), bitDepth_(0),
+      pitchPrimary_(0), pitchSecondary_(0),
       lockedPrimaryBuf_(NULL),
-      lockedSecondaryBuf_(NULL),
-      width_(0), height_(0), bitDepth_(0) { }
+      lockedSecondaryBuf_(NULL) { }
 
-    virtual int flip() = 0;
     virtual int createWindow(int width, int height, int bitDepth) = 0;
     virtual int lockPrimary();
     virtual int unlockPrimary();
     virtual int lockSecondary();
     virtual int unlockSecondary();
-    //virtual int fillSecondary(uint32_t color);
-    //virtual int fillPrimary(uint32_t color);
-    
+    virtual int fillSecondary(uint32_t color);
+    virtual int fillPrimary(uint32_t color);
+    virtual int flipDisplay();
+
+    void drawPixel(int x, int y, uint32_t color);
+
     virtual ~VideoSystem() { }
+  protected:
+    FrameBuffer *primary_;
+    FrameBuffer *secondary_;
+    int width_;
+    int height_;
+    int bitDepth_;
+
   private:
     int lockFrameBufferComon(bool isPrimary);
     int unlockFrameBufferComon(bool isPrimary);
 
-    FrameBuffer *primary_;
-    FrameBuffer *secondary_;
     int pitchPrimary_;
     int pitchSecondary_;
 
     uint8_t *lockedPrimaryBuf_;
     uint8_t *lockedSecondaryBuf_;
     
-    int width_;
-    int height_;
-    int bitDepth_;
 };
 
 }

@@ -7,15 +7,19 @@
 #include "video/FrameBuffer.h"
 #include "logger/Logger.h"
 #include "video/FrameBufferSDL.h"
+#include "video/VideoSystemSDL.h"
 
 using namespace poppy;
 
 int main(int argc, char *argv[])
 {
+#if 0
   SDL_Init(SDL_INIT_EVERYTHING);
   //setLogLevel(INFO);
 
   SDL_Surface *screen = SDL_SetVideoMode(640, 480, 32, SDL_SWSURFACE);
+  SDL_Surface *bmp = SDL_LoadBMP(argv[1]);
+  FrameBufferSDL bmpFrameBuf(bmp, false);
 
   int x, y;
   uint32_t yellow;
@@ -32,8 +36,31 @@ int main(int argc, char *argv[])
   sdlFrameBuf.putPixel(buf, x, y, yellow);
   sdlFrameBuf.unlockFrameBuffer(buf);
   
-  sdlFrameBuf.fill(yellow);
+  //sdlFrameBuf.fill(yellow);
   //SDL_Flip(screen);
+  sdlFrameBuf.flip(&bmpFrameBuf); 
+#endif
+
+  VideoSystemSDL videoSys;
+
+  videoSys.createWindow(640, 480, 24);
+  int x = 0;
+  int y = 0;
+
+  for (x = 0; x < 640; x++)
+  {
+    for (y = 0; y < 480; y++)
+    {
+      uint8_t r = rand() % 255;
+      uint8_t g = rand() % 255;
+      uint8_t b = rand() % 255;
+      uint32_t color = b + (g << 8) + (r << 16);
+      
+      videoSys.drawPixel(x, y, color);
+    }
+  }
+
+  videoSys.flipDisplay();
 
   //handing event
   SDL_Event event;
@@ -46,8 +73,6 @@ int main(int argc, char *argv[])
       break;
     }
   }
-
-  SDL_Quit();
 
   return 0;
 }

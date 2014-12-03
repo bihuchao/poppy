@@ -86,5 +86,25 @@ int VideoSystem::unlockSecondary()
   return unlockFrameBufferComon(false);
 }
 
+int VideoSystem::fillSecondary(uint32_t color)
+{
+  return secondary_->fill(color);
+}
+
+int VideoSystem::fillPrimary(uint32_t color)
+{
+  return primary_->fill(color);
+}
+
+int VideoSystem::flipDisplay()
+{
+  return primary_->flip(secondary_);
+}
+
+void VideoSystem::drawPixel(int x, int y, uint32_t color)
+{
+  secondary_->putPixel(lockedSecondaryBuf_, x, y, color);
+}
+
 }
 

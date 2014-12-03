@@ -73,5 +73,24 @@ int FrameBufferSDL::fill(uint32_t color)
   return ret;
 }
 
+int FrameBufferSDL::flip(const FrameBuffer* frameBuf)
+{
+  FrameBufferSDL *frameSdl = (FrameBufferSDL *)frameBuf;
+
+  int ret = SDL_BlitSurface(frameSdl->surface_, NULL, surface_, NULL);
+  if (ret != 0)
+  {
+    LOG_ERROR("SDL_BlitSurface error - %d\n", ret); 
+    return ret;
+  }
+
+  if (primary_)
+  {
+    SDL_Flip(surface_); 
+  }
+
+  return 0;
+}
+
 }
 
