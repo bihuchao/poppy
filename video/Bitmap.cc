@@ -20,7 +20,7 @@ int Bitmap::loadFromBmpFile(const char *filename)
   FILE *fp = ::fopen(filename, "rb");
   if (fp == NULL)
   {
-    return -1; 
+    return -1;
   }
 
   std::tr1::shared_ptr<FILE> filePtr(fp, ::fclose);
@@ -28,24 +28,24 @@ int Bitmap::loadFromBmpFile(const char *filename)
   size_t ret = ::fread(&fileHeader, 1, sizeof(BitmapFileHeader), fp);
   if (ret != sizeof(BitmapFileHeader) || fileHeader.type != kBmpFileMagic)
   {
-    return -1; 
+    return -1;
   }
 
   ret = ::fread(&infoHeader, 1, sizeof(BitmapInfoHeader), fp);
   if (ret != sizeof(BitmapInfoHeader))
   {
-    return -1; 
+    return -1;
   }
 
   if (infoHeader.bitCounts == 8)
   {
-    palette.resize(256); 
+    palette.resize(256);
     ret = ::fread(&*palette.begin(), 1, palette.size()
         * sizeof(PaletteEntry), fp);
     if (ret != palette.size() * sizeof(PaletteEntry))
     {
       palette.clear();
-      return -1; 
+      return -1;
     }
   }
 
@@ -54,7 +54,7 @@ int Bitmap::loadFromBmpFile(const char *filename)
   if (ret != infoHeader.sizeImage)
   {
     imageBuffer.clear();
-    return -1; 
+    return -1;
   }
 
   return 0;
@@ -64,13 +64,13 @@ int Bitmap::storeToBmpFile(const char *filename)
 {
   if (imageBuffer.empty())
   {
-    return -1; 
+    return -1;
   }
 
   FILE *fp = ::fopen(filename, "wb");
   if (fp == NULL)
   {
-    return -1; 
+    return -1;
   }
 
   std::tr1::shared_ptr<FILE> filePtr(fp, ::fclose);
@@ -78,29 +78,29 @@ int Bitmap::storeToBmpFile(const char *filename)
   size_t ret = ::fwrite(&fileHeader, 1, sizeof(BitmapFileHeader), fp);
   if (ret != sizeof(BitmapFileHeader))
   {
-    return -1; 
+    return -1;
   }
-  
+
   ret = ::fwrite(&infoHeader, 1, sizeof(BitmapInfoHeader), fp);
   if (ret != sizeof(BitmapInfoHeader))
   {
-    return -1; 
+    return -1;
   }
 
   if (!palette.empty())
   {
-    ret = ::fwrite(&*palette.begin(), 1, palette.size() 
-        * sizeof(PaletteEntry), fp); 
+    ret = ::fwrite(&*palette.begin(), 1, palette.size()
+        * sizeof(PaletteEntry), fp);
     if (ret != palette.size() * sizeof(PaletteEntry))
     {
-      return -1; 
+      return -1;
     }
   }
 
   ret = ::fwrite(&*imageBuffer.begin(), 1, imageBuffer.size(), fp);
   if (ret != imageBuffer.size())
   {
-    return -1; 
+    return -1;
   }
 
   return 0;

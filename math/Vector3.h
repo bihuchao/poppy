@@ -35,14 +35,14 @@ class Vector3
     Vector3 &operator *=(float a)
     {
       x_ *= a; y_ *= a; z_ *= a;
-      return *this; 
+      return *this;
     }
 
     Vector3 &operator /=(float a)
     {
       float oneOverA = 1.0f / a;
       x_ *= oneOverA; y_ *= oneOverA; z_ *= oneOverA;
-      return *this; 
+      return *this;
     }
 
     Vector3 operator -=(const Vector3& rhs) {
@@ -55,21 +55,21 @@ class Vector3
 
     Vector3 operator *(float a) const
     {
-      return Vector3(a * x_, a * y_, a * z_); 
+      return Vector3(a * x_, a * y_, a * z_);
     }
 
     Vector3 operator /(float a) const
     {
-      float oneOverA = 1.0f / a; 
+      float oneOverA = 1.0f / a;
       return Vector3(x_ * oneOverA, y_ * oneOverA, z_ * oneOverA);
     }
 
     void zero() { x_ = y_ = z_ = 0; }
     void normalize() {
-      float magSq = x_ * x_ + y_ * y_ + z_ * z_; 
+      float magSq = x_ * x_ + y_ * y_ + z_ * z_;
       if (magSq > 0.0f)
       {
-        float oneOverMag = 1.0f / sqrt(magSq); 
+        float oneOverMag = 1.0f / sqrt(magSq);
         x_ *= oneOverMag;
         y_ *= oneOverMag;
         z_ *= oneOverMag;
@@ -88,14 +88,14 @@ class Vector3
 
 inline bool operator ==(const Vector3 &lhs, const Vector3 &rhs)
 {
-  return (lhs.x_ == rhs.x_) 
+  return (lhs.x_ == rhs.x_)
     && (lhs.y_ == rhs.y_)
     && (lhs.z_ == rhs.z_);
 }
 
 inline bool operator !=(const Vector3 &lhs, const Vector3 &rhs)
 {
-  return (lhs.x_ != rhs.x_) 
+  return (lhs.x_ != rhs.x_)
     || (lhs.y_ != rhs.y_)
     || (lhs.z_ != rhs.z_);
 }

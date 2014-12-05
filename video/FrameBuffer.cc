@@ -10,7 +10,7 @@ namespace poppy
 
 void FrameBuffer::initFmtSizeMap()
 {
-  fmtSizeMap[PIXEL_FORMAT8888]    = 4; 
+  fmtSizeMap[PIXEL_FORMAT8888]    = 4;
 }
 
 int FrameBuffer::getPixelSizeByFmt(PixelFormat fmt)
@@ -21,14 +21,14 @@ int FrameBuffer::getPixelSizeByFmt(PixelFormat fmt)
   return (it != fmtSizeMap.end()) ? it->second : -1;
 }
 
-uint32_t FrameBuffer::getPixelCommon(uint8_t *buffer, int x, 
+uint32_t FrameBuffer::getPixelCommon(uint8_t *buffer, int x,
     int y, int pitch, int sizepix)
 {
   uint8_t *ppixel = buffer + y * pitch + x * sizepix;
 
   switch (sizepix)
   {
-    case 1: 
+    case 1:
       return *ppixel;
     case 2:
       return *(uint16_t *)ppixel;
@@ -41,14 +41,14 @@ uint32_t FrameBuffer::getPixelCommon(uint8_t *buffer, int x,
   }
 }
 
-void FrameBuffer::putPixelCommon(uint8_t *buffer, int x, int y, 
+void FrameBuffer::putPixelCommon(uint8_t *buffer, int x, int y,
       int pitch, int sizepix, uint32_t pixel)
 {
   uint8_t *ppixel = buffer + y * pitch + x * sizepix;
 
   switch (sizepix)
   {
-    case 1: 
+    case 1:
       *ppixel = (uint8_t)pixel;
       break;
     case 2:
@@ -81,26 +81,26 @@ uint32_t FrameBuffer::getPointPosition(int x, int y, int w, int h)
   }
   else if (y > maxY)
   {
-    position |= kClipCodeS; 
+    position |= kClipCodeS;
   }
   else if (x < 0)
   {
-    position |= kClipCodeW; 
+    position |= kClipCodeW;
   }
   else if (x > maxX)
   {
-    position |= kClipCodeE; 
+    position |= kClipCodeE;
   }
-  
+
   return position;
 }
 
-uint32_t FrameBuffer::getClipedLinePoint(int w, int h, 
+uint32_t FrameBuffer::getClipedLinePoint(int w, int h,
     uint32_t pos, int ox, int oy, int *px, int *py)
 {
   switch (pos)
   {
-    case kClipCodeC: 
+    case kClipCodeC:
       break;
     case kClipCodeN:
       break;
@@ -118,13 +118,13 @@ int FrameBuffer::clipLine(int w, int h, int *px1, int *py1,
   //两个点的连线不经过窗口
   if (p1Code & p2Code)
   {
-    return 0; 
+    return 0;
   }
 
   //两个点都在窗口内部
   if (p1Code == kClipCodeC && p2Code == kClipCodeC)
   {
-    return 1; 
+    return 1;
   }
 
 

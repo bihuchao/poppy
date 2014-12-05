@@ -35,44 +35,49 @@ int main(int argc, char *argv[])
   sdlFrameBuf.lockFrameBuffer(&buf, &pitch);
   sdlFrameBuf.putPixel(buf, x, y, yellow);
   sdlFrameBuf.unlockFrameBuffer(buf);
-  
+
   //sdlFrameBuf.fill(yellow);
   //SDL_Flip(screen);
-  sdlFrameBuf.flip(&bmpFrameBuf); 
+  sdlFrameBuf.flip(&bmpFrameBuf);
 #endif
 
   VideoSystemSDL videoSys;
 
   videoSys.createWindow(640, 480, 32);
-  int x = 0;
-  int y = 0;
-
-  for (x = 0; x < 640; x++)
-  {
-    for (y = 0; y < 480; y++)
-    {
-      uint8_t r = rand() % 255;
-      uint8_t g = rand() % 255;
-      uint8_t b = rand() % 255;
-      uint32_t color = b + (g << 8) + (r << 16);
-      
-      //videoSys.lockSecondary();
-      videoSys.drawPixel(x, y, color);
-      //videoSys.unlockSecondary();
-    }
-  }
-
-  videoSys.flipDisplay();
 
   //handing event
   SDL_Event event;
-  while (SDL_WaitEvent(&event)) 
+  bool quit = false;
+  while (!quit)
   {
-    LOG_INFO("Get a event: %d\n", event.type);
-    if (event.type == SDL_QUIT) 
+    int x = 0;
+    int y = 0;
+
+    videoSys.lockSecondary();
+    for (x = 0; x < 640; x++)
     {
-      LOG_INFO("Break from event loop!\n");
-      break;
+      for (y = 0; y < 480; y++)
+      {
+        uint8_t r = rand() % 255;
+        uint8_t g = rand() % 255;
+        uint8_t b = rand() % 255;
+        uint32_t color = b + (g << 8) + (r << 16);
+
+        videoSys.drawPixel(x, y, color);
+      }
+    }
+    videoSys.unlockSecondary();
+
+    videoSys.flipDisplay();
+
+    if (SDL_PollEvent(&event))
+    {
+      LOG_INFO("Get a event: %d\n", event.type);
+      if (event.type == SDL_QUIT)
+      {
+        LOG_INFO("Break from event loop!\n");
+        quit = true;
+      }
     }
   }
 
