@@ -88,21 +88,44 @@ int VideoSystem::unlockSecondary()
 
 int VideoSystem::fillSecondary(uint32_t color)
 {
+  if (secondary_ == NULL)
+  {
+    LOG_ERROR("secondary_ is NULL, did not create window!\n");
+    return -1;
+  }
   return secondary_->fill(color);
 }
 
 int VideoSystem::fillPrimary(uint32_t color)
 {
+  if (primary_ == NULL)
+  {
+    LOG_ERROR("primary_ is NULL, did not create window!\n");
+    return -1;
+  }
+
   return primary_->fill(color);
 }
 
 int VideoSystem::flipDisplay()
 {
+  if (primary_ == NULL || secondary_ == NULL)
+  {
+    LOG_ERROR("primary_ or secondary_ is NULL, did not create window!\n");
+    return -1;
+  }
+
   return primary_->flip(secondary_);
 }
 
 void VideoSystem::drawPixel(int x, int y, uint32_t color)
 {
+  if (lockedSecondaryBuf_ == NULL)
+  {
+    LOG_ERROR("Secondary buffer did not lock!\n");
+    return;
+  }
+
   secondary_->putPixel(lockedSecondaryBuf_, x, y, color);
 }
 
