@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 
   VideoSystemSDL videoSys;
 
-  videoSys.createWindow(640, 480, 24);
+  videoSys.createWindow(640, 480, 32);
   int x = 0;
   int y = 0;
 
@@ -56,7 +56,9 @@ int main(int argc, char *argv[])
       uint8_t b = rand() % 255;
       uint32_t color = b + (g << 8) + (r << 16);
       
+      videoSys.lockSecondary();
       videoSys.drawPixel(x, y, color);
+      videoSys.unlockSecondary();
     }
   }
 

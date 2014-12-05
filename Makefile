@@ -1,4 +1,4 @@
-TARGET=poppyTest.exe
+TARGET=poppy.exe
 CPP=g++
 CFLAGS= -g -Wall -I./logger -I./video
 LFLAGS=-lmingw32 -lSDLmain -lSDL
@@ -9,6 +9,8 @@ SRCS=video/FrameBuffer.cc video/Bitmap.cc \
 		 video/VideoSystem.cc video/VideoSystemSDL.cc \
 		 poppy.cc
 OBJS=$(patsubst %.cc, %.o, $(SRCS))
+
+all: $(TARGET)
 
 $(TARGET): $(OBJS)
 	$(CPP) $^ -o $@ $(LFLAGS)
