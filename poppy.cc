@@ -43,32 +43,68 @@ int main(int argc, char *argv[])
 
   VideoSystemSDL videoSys;
 
-  videoSys.createWindow(640, 480, 32);
+  videoSys.createWindow(640, 640, 32);
 
+#if 1
+  uint32_t color = 0 + (255 << 8) + (0 << 16);
+  videoSys.lockSecondary();
+  //videoSys.drawLine(-1, -1, 780, 780, color);
+  //videoSys.drawLine(-1, 0, 655, 0, color);
+  //videoSys.drawLine(-1000, 639, 10000, 639, color);
+  //videoSys.drawLine(0, 1000, 0, -1000, color);
+  //videoSys.drawLine(639, -1000, 639, 1000, color);
+  videoSys.drawLine(639, -200, 0, 639, color);
+  //videoSys.fillSecondary(color);
+  videoSys.unlockSecondary();
+
+  videoSys.flipDisplay();
+
+  SDL_Event event;
+  while (SDL_WaitEvent(&event))
+  {
+    if (event.type == SDL_QUIT)
+    {
+      LOG_INFO("Break from event loop!\n");
+      break;
+    }
+  }
+#endif
+
+#if 0
   //handing event
   SDL_Event event;
+  uint32_t color;
   bool quit = false;
+  bool show = false;
   while (!quit)
   {
-    int x = 0;
-    int y = 0;
-
-    videoSys.lockSecondary();
-    for (x = 0; x < 640; x++)
+    if (!show)
     {
-      for (y = 0; y < 480; y++)
+      videoSys.lockSecondary();
+      for (int x = 10; x < 640; x += 10)
       {
         uint8_t r = rand() % 255;
         uint8_t g = rand() % 255;
         uint8_t b = rand() % 255;
-        uint32_t color = b + (g << 8) + (r << 16);
-
-        videoSys.drawPixel(x, y, color);
+        color = b + (g << 8) + (r << 16);
+        videoSys.drawLine(0, 0, x, 639, color);
       }
-    }
-    videoSys.unlockSecondary();
+      videoSys.drawLine(0, 0, 639, 639, color);
 
-    videoSys.flipDisplay();
+      for (int y = 10; y < 640; y += 10)
+      {
+        uint8_t r = rand() % 255;
+        uint8_t g = rand() % 255;
+        uint8_t b = rand() % 255;
+        color = b + (g << 16) + (r << 24);
+        videoSys.drawLine(0, 0, 639, y, color);
+      }
+
+      videoSys.unlockSecondary();
+
+      videoSys.flipDisplay();
+      show = true;
+    }
 
     if (SDL_PollEvent(&event))
     {
@@ -80,6 +116,8 @@ int main(int argc, char *argv[])
       }
     }
   }
+#endif
+  SDL_Quit();
 
   return 0;
 }

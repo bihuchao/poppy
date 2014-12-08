@@ -12,19 +12,19 @@
 namespace poppy
 {
 
-class FrameBufferSDL: public FrameBuffer
+class FrameBufferSDL : public FrameBuffer
 {
-  public:
-    FrameBufferSDL(SDL_Surface *surface, bool primary);
+ public:
+  FrameBufferSDL(SDL_Surface *surface, bool primary);
 
-    virtual int lockFrameBuffer(uint8_t **pbuffer, int *ppitch);
-    virtual int unlockFrameBuffer(uint8_t *buffer);
-    virtual int fill(uint32_t color);
-    virtual int flip(const FrameBuffer* frameBuf);
-  private:
-    PixelFormat getPixelFmtSurface(SDL_Surface *surface);
-    SDL_Surface *surface_;
-    bool primary_;
+  virtual int lockFrameBuffer(uint8_t **pbuffer, int *ppitch);
+  virtual int unlockFrameBuffer(uint8_t *buffer);
+  virtual int fill(uint32_t color);
+  virtual int flip(const FrameBuffer* frameBuf);
+ private:
+  PixelFormat getPixelFmtSurface(SDL_Surface *surface);
+  SDL_Surface *surface_;
+  bool primary_;
 };
 
 }

@@ -21,7 +21,7 @@ typedef struct BitmapFileHeader_
   uint16_t reserved1;
   uint16_t reserved2;
   uint32_t offBits;
-}BitmapFileHeader;
+} BitmapFileHeader;
 
 typedef struct BitmapInfoHeader_
 {
@@ -36,7 +36,7 @@ typedef struct BitmapInfoHeader_
   uint32_t yPelsPerMeter;
   uint32_t clrUsed;
   uint32_t clrImportant;
-}BitmapInfoHeader;
+} BitmapInfoHeader;
 
 typedef struct PaletteEntry_
 {
@@ -46,23 +46,22 @@ typedef struct PaletteEntry_
   uint8_t flags;
 } PaletteEntry;
 
-
 #pragma pack()
 
 class Bitmap
 {
-  public:
-    static const uint16_t kBmpFileMagic = 0x4d42;
+ public:
+  static const uint16_t kBmpFileMagic = 0x4d42;
 
-    int loadFromBmpFile(const char *name);
-    int storeToBmpFile(const char *name);
-    void dumpInfoHeader();
-    void dumpFileHeader();
-  private:
-    BitmapFileHeader fileHeader;
-    BitmapInfoHeader infoHeader;
-    std::vector<uint8_t> imageBuffer;
-    std::vector<PaletteEntry> palette;
+  int loadFromBmpFile(const char *name);
+  int storeToBmpFile(const char *name);
+  void dumpInfoHeader();
+  void dumpFileHeader();
+ private:
+  BitmapFileHeader fileHeader;
+  BitmapInfoHeader infoHeader;
+  std::vector<uint8_t> imageBuffer;
+  std::vector<PaletteEntry> palette;
 };
 
 }

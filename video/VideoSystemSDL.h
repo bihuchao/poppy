@@ -12,14 +12,17 @@
 namespace poppy
 {
 
-class VideoSystemSDL: public VideoSystem
+class VideoSystemSDL : public VideoSystem
 {
-  public:
-    VideoSystemSDL() { SDL_Init(SDL_INIT_EVERYTHING); }
+ public:
+  VideoSystemSDL()
+  {
+    SDL_Init(SDL_INIT_EVERYTHING);
+  }
 
-    virtual int createWindow(int width, int height, int bitDepth);
-    
-    ~VideoSystemSDL();
+  virtual int createWindow(int width, int height, int bitDepth);
+
+  ~VideoSystemSDL();
 };
 
 }

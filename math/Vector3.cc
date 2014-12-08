@@ -7,5 +7,5 @@
 
 namespace poppy
 {
-  const static Vector3 kZeroVector3(0, 0, 0);
+  //const static Vector3 kZeroVector3(0, 0, 0);
 }

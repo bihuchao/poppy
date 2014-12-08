@@ -129,5 +129,16 @@ void VideoSystem::drawPixel(int x, int y, uint32_t color)
   secondary_->putPixel(lockedSecondaryBuf_, x, y, color);
 }
 
+int VideoSystem::drawLine(int x1, int y1, int x2, int y2, uint32_t color)
+{
+  if (lockedSecondaryBuf_ == NULL)
+  {
+    LOG_ERROR("Secondary buffer did not lock!\n");
+    return -1;
+  }
+
+  return secondary_->drawLine(lockedSecondaryBuf_, x1, y1, x2, y2, color);
+}
+
 }
 

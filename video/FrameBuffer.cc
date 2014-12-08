@@ -3,7 +3,10 @@
 //
 // Author: dingcongjun (dingcj)
 
+#include <algorithm>
+
 #include "FrameBuffer.h"
+#include "Logger.h"
 
 namespace poppy
 {
@@ -69,66 +72,90 @@ void FrameBuffer::putPixelCommon(uint8_t *buffer, int x, int y,
   return;
 }
 
-uint32_t FrameBuffer::getPointPosition(int x, int y, int w, int h)
+int FrameBuffer::drawLine(uint8_t *buf, int x1, int y1, int x2, int y2, uint32_t color)
 {
-  uint32_t position = 0u;
-  int maxX = w - 1;
-  int maxY = h - 1;
 
-  if (y < 0)
+  Line2 line(x1, y1, x2, y2);
+
+
+  int cx1 = x1;
+
+  int cy1 = y1;
+  int cx2 = x2;
+  int cy2 = y2;
+
+  int ret = line.clip(width_, height_, &cx1, &cy1, &cx2, &cy2);
+  if (ret == 0)
   {
-    position |= kClipCodeN;
-  }
-  else if (y > maxY)
-  {
-    position |= kClipCodeS;
-  }
-  else if (x < 0)
-  {
-    position |= kClipCodeW;
-  }
-  else if (x > maxX)
-  {
-    position |= kClipCodeE;
+    LOG_ERROR("line is not in window!\n");
+    return -1;
   }
 
-  return position;
+  if (line.vLine())
+  {
+    drawVLine(buf, cy1, cy2, cx1, color);
+    return 0;
+  }
+  else if (line.hLine())
+  {
+    drawHLine(buf, cx1, cx2, cy1, color);
+    return 0;
+  }
+
+  drawDiagonal(buf, cx1, cy1, cx2, cy2, color);
+  return 0;
 }
 
-uint32_t FrameBuffer::getClipedLinePoint(int w, int h,
-    uint32_t pos, int ox, int oy, int *px, int *py)
+int FrameBuffer::drawVLine(uint8_t *buf, int y1, int y2, int x, uint32_t color)
 {
-  switch (pos)
+  int start = std::min(y1, y2);
+  int end = std::max(y1, y2);
+
+  for (int y = start; y <= end; y++)
   {
-    case kClipCodeC:
-      break;
-    case kClipCodeN:
-      break;
+    putPixel(buf, x, y, color);
   }
 
   return 0;
 }
 
-int FrameBuffer::clipLine(int w, int h, int *px1, int *py1,
-        int *px2, int *py2)
+int FrameBuffer::drawHLine(uint8_t *buf, int x1, int x2, int y, uint32_t color)
 {
-  uint32_t p1Code = getPointPosition(*px1, *py1, w, h);
-  uint32_t p2Code = getPointPosition(*px2, *py2, w, h);
+  int start = std::min(x1, x2);
+  int end = std::max(x1, x2);
 
-  //两个点的连线不经过窗口
-  if (p1Code & p2Code)
+  for (int x = start; x <= end; x++)
   {
-    return 0;
+    putPixel(buf, x, y, color);
   }
 
-  //两个点都在窗口内部
-  if (p1Code == kClipCodeC && p2Code == kClipCodeC)
+  return 0;
+}
+
+int FrameBuffer::drawDiagonal(uint8_t *buf, int x1, int y1, int x2,
+                              int y2, uint32_t color)
+{
+  int start = std::min(x1, x2);
+  int end = std::max(x1, x2);
+  Line2 line(x1, y1, x2, y2);
+
+  for (int x = start; x <= end; x++)
   {
-    return 1;
+    int y;
+    line.getY(x, &y);
+
+    putPixel(buf, x, y, color);
   }
 
-
-  return 1;
+  start = std::min(y1, y2);
+  end = std::max(y1, y2);
+  for (int y = start; y <= end; y++)
+  {
+    int x;
+    line.getX(y, &x);
+    putPixel(buf, x, y, color);
+  }
+  return 0;
 }
 
 }

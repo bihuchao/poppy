@@ -15,44 +15,48 @@ namespace poppy
 
 class VideoSystem
 {
-  public:
-    VideoSystem()
-      :primary_(NULL),
-      secondary_(NULL),
-      width_(0), height_(0), bitDepth_(0),
-      pitchPrimary_(0), pitchSecondary_(0),
-      lockedPrimaryBuf_(NULL),
-      lockedSecondaryBuf_(NULL) { }
+ public:
+  VideoSystem()
+      : primary_(NULL),
+        secondary_(NULL),
+        width_(0),
+        height_(0),
+        bitDepth_(0),
+        pitchPrimary_(0),
+        pitchSecondary_(0),
+        lockedPrimaryBuf_(NULL),
+        lockedSecondaryBuf_(NULL) { }
 
-    virtual int createWindow(int width, int height, int bitDepth) = 0;
-    virtual int lockPrimary();
-    virtual int unlockPrimary();
-    virtual int lockSecondary();
-    virtual int unlockSecondary();
-    virtual int fillSecondary(uint32_t color);
-    virtual int fillPrimary(uint32_t color);
-    virtual int flipDisplay();
+  virtual int createWindow(int width, int height, int bitDepth) = 0;
+  virtual int lockPrimary();
+  virtual int unlockPrimary();
+  virtual int lockSecondary();
+  virtual int unlockSecondary();
+  virtual int fillSecondary(uint32_t color);
+  virtual int fillPrimary(uint32_t color);
+  virtual int flipDisplay();
 
-    void drawPixel(int x, int y, uint32_t color);
+  void drawPixel(int x, int y, uint32_t color);
+  int drawLine(int x1, int y1, int x2, int y2, uint32_t color);
 
-    virtual ~VideoSystem() { }
-  protected:
-    FrameBuffer *primary_;
-    FrameBuffer *secondary_;
-    int width_;
-    int height_;
-    int bitDepth_;
+  virtual ~VideoSystem() { }
+ protected:
+  FrameBuffer *primary_;
+  FrameBuffer *secondary_;
+  int width_;
+  int height_;
+  int bitDepth_;
 
-  private:
-    int lockFrameBufferComon(bool isPrimary);
-    int unlockFrameBufferComon(bool isPrimary);
+ private:
+  int lockFrameBufferComon(bool isPrimary);
+  int unlockFrameBufferComon(bool isPrimary);
 
-    int pitchPrimary_;
-    int pitchSecondary_;
+  int pitchPrimary_;
+  int pitchSecondary_;
 
-    uint8_t *lockedPrimaryBuf_;
-    uint8_t *lockedSecondaryBuf_;
-    
+  uint8_t *lockedPrimaryBuf_;
+  uint8_t *lockedSecondaryBuf_;
+
 };
 
 }
