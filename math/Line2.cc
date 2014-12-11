@@ -45,7 +45,7 @@ Line2::Line2(int x1, int y1, int x2, int y2)
     else
     {
       k_ = (y2 - y1) / (float)(x2 - x1);
-      kb_ = y1 - ((y2 - y1) / (x2 - x1)) * x1;
+      kb_ = y1 - ((y2 - y1) / (float)(x2 - x1)) * x1;
     }
   }
 }
@@ -271,15 +271,18 @@ uint32_t Line2::getPosition(int w, int h, int x, int y)
   {
     position |= kClipCodeN;
   }
-  else if (y > maxY)
+
+  if (y > maxY)
   {
     position |= kClipCodeS;
   }
-  else if (x < 0)
+
+  if (x < 0)
   {
     position |= kClipCodeW;
   }
-  else if (x > maxX)
+
+  if (x > maxX)
   {
     position |= kClipCodeE;
   }
