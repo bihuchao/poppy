@@ -3,6 +3,9 @@
 //
 // Author: dingcongjun (dingcj)
 
+#ifndef POPPY_MATH_MATRIX_INL_H
+#define POPPY_MATH_MATRIX_INL_H
+
 #include <stdio.h>
 #include <stddef.h>
 #include <string.h>
@@ -14,6 +17,9 @@
 
 #include "Logger.h"
 #include "Matrix.h"
+
+namespace poppy
+{
 
 template<size_t R, size_t C>
 Matrix<R, C>::Matrix(const char *filename)
@@ -101,3 +107,41 @@ Matrix<R, C> operator*(const Matrix<R, D>& lhs, const Matrix<D, C>& rhs)
 
   return ret;
 }
+
+template<size_t R, size_t C>
+Matrix<R - 1, C - 1> Matrix<R, C>::cofactor(size_t dr, size_t dc)
+{
+  Matrix<R - 1, C - 1> ret;
+
+  size_t rrow = 0;
+  for (size_t i = 0; i < R; i++)
+  {
+    if (i + 1 == dr)
+    {
+      continue;
+    }
+
+    size_t rcolumn = 0;
+    for (size_t j = 0; j < C; j++)
+    {
+      if (j + 1 == dc)
+      {
+        continue;
+      }
+      ret.setItem(rrow, rcolumn, getItem(i, j));
+      ++rcolumn;
+    }
+    ++rrow;
+  }
+}
+
+/*
+template<size_t R, size_t C>
+float Matrix<R, C>::cofactorOfDeterminant(size_t r, size_t c)
+{
+
+}
+*/
+}
+
+#endif

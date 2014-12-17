@@ -14,11 +14,11 @@ using namespace poppy;
 
 int main(int argc, char *argv[])
 {
-  Matrix<5, 3> matrix1("matrix.txt");
-  Matrix<3, 5> matrix2("matrix.txt");
-  Matrix<5, 5> matrix3 = matrix1 * matrix2;
+  Matrix<4, 4> matrix1("matrix.txt");
+  Vector3 tmp1(1.0f, 2.0f, 3.0f);
+  Vector3 tmp2 = tmp1 * matrix1;
 
-  matrix3.dump();
+  printf("x: %f, y: %f, z: %f\n", tmp2.x, tmp2.y, tmp2.z);
   return 0;
 }
 
