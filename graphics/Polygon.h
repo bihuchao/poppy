@@ -4,7 +4,7 @@
 // Author: dingcongjun (dingcj)
 
 #ifndef POPPY_GRAPHICS_POLYGON_H
-#define POPPY_GRAPHICS_POLYGON_H\
+#define POPPY_GRAPHICS_POLYGON_H
 
 
 #include <vector>
@@ -18,10 +18,7 @@ namespace poppy
 class Polygon
 {
  public:
-  enum TranType
-  {
-
-  };
+  void TransformToWorld();
  private:
   uint32_t state_;
   uint32_t attr_;

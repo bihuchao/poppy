@@ -14,8 +14,8 @@ SRCS=video/FrameBuffer.cc video/Bitmap.cc \
 		 logger/Logger.cc math/Vector3.cc math/Matrix.cc\
 		 video/FrameBufferSDL.cc \
 		 video/VideoSystem.cc video/VideoSystemSDL.cc \
-		 math/Line2.cc\
-		 graphics/Polygon.cc \
+		 math/Line2.cc math/EulerAngles.cc\
+		 graphics/Polygon.cc graphics/Camera.cc\
 		 poppy.cc
 OBJS=$(patsubst %.cc, %.o, $(SRCS))
 

@@ -7,6 +7,7 @@
 #define POPPY_MATH_MATRIX_H
 
 #include <stddef.h>
+#include <string.h>
 
 #include "Vector3.h"
 
@@ -26,6 +27,7 @@ template<size_t R, size_t C> class Matrix
   size_t row() const { return R; }
   size_t column() const {return C; }
   void dump() const;
+  void zero() { memset((void *)matrixData_, 0, sizeof(matrixData_)); }
 
   Matrix<R - 1, C - 1> cofactor(size_t dr, size_t dc);
   //float cofactorOfDeterminant(size_t r, size_t c);
