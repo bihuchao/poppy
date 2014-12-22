@@ -1,6 +1,6 @@
 TARGET=poppy.exe
 CPP=g++
-CFLAGS= -g -Wall -I./logger -I./video -I./math
+CFLAGS= -g -Wall -I./logger -I./video -I./math -I./graphics
 LFLAGS=-lSDL
 
 OS:=$(shell uname -s)
@@ -15,7 +15,7 @@ SRCS=video/FrameBuffer.cc video/Bitmap.cc \
 		 video/FrameBufferSDL.cc \
 		 video/VideoSystem.cc video/VideoSystemSDL.cc \
 		 math/Line2.cc math/EulerAngles.cc\
-		 graphics/Polygon.cc graphics/Camera.cc\
+		 graphics/Object.cc graphics/Camera.cc\
 		 poppy.cc
 OBJS=$(patsubst %.cc, %.o, $(SRCS))
 

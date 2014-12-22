@@ -44,10 +44,13 @@ Vector3 Camera::transformCameraToPer(const Vector3& pos)
 
 Vector3 Camera::transformPerToScreen(const Vector3& pos)
 {
-  Vector3 ret;
+  Vector3 ret = pos;
 
+  //先根据视平面和屏幕的比例进行一次缩放
+  ret.x = ret.x * viewPortWidth_ / viewPlaneWidth_;
   ret.x += viewPortWidth_ / 2.0f;
 
+  ret.y = ret.y * viewPortHeight_ / viewPlaneHeight_;
   ret.y += viewPortHeight_ / 2.0f;
   ret.y = -ret.y + viewPortHeight_ - 1;
 

@@ -3,34 +3,27 @@
 //
 // Author: dingcongjun (dingcj)
 
-#ifndef POPPY_GRAPHICS_POLYGON_H
-#define POPPY_GRAPHICS_POLYGON_H
+#ifndef POPPY_GRAPHICS_OBJECT_H
+#define POPPY_GRAPHICS_OBJECT_H
 
+#include <stdint.h>
 
 #include <vector>
-#include <tr1/memory>
+//#include <tr1/memory>
 
 #include "Vector3.h"
 
 namespace poppy
 {
 
-class Polygon
+struct Polygon
 {
- public:
-  void TransformToWorld();
- private:
   uint32_t state_;
   uint32_t attr_;
   uint32_t color_;
 
-  std::tr1::shared_ptr<std::vector<Vector3> > vTotalList_;
+  std::vector<Vector3>* vlist;
   int vert[3];
-
-  Vector3 vlist_[3];
-  Vector3 tlist_[3];
-
-  int polyType_;
 };
 
 }

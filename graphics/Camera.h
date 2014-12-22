@@ -27,9 +27,9 @@ class Camera
   Vector3 transformCameraToPer(const Vector3& pos);
   Vector3 transformWorldToCamera(const Vector3& pos);
 
-  Matrix<4, 4> getMatrixWorldToCamera();
-  Matrix<4, 4> getMatrixCameraToPer();
-  Matrix<4, 4> getMatrixPerToScreen();
+  Matrix<4, 4> getMatrixWorldToCamera() { return worldToCamera_; }
+  Matrix<4, 4> getMatrixCameraToPer() { return cameraToPer_; }
+  Matrix<4, 4> getMatrixPerToScreen() { return perToScreen_; }
 
   void buildCameraMatrixByEuler();
 
