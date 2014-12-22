@@ -61,4 +61,48 @@ Vector3 Camera::transformWorldToCamera(const Vector3& pos)
   return pos * worldToCamera_;
 }
 
+void Camera::buildCameraMatrixByEuler()
+{
+  //旋转部分
+  worldToCamera_ = dir_.getWorldToObjectMatrix();
+  //平移部分
+  worldToCamera_.setItem(4, 1, -pos_.x);
+  worldToCamera_.setItem(4, 2, -pos_.y);
+  worldToCamera_.setItem(4, 3, -pos_.z);
+}
+
+void Camera::buildCameraMatrixByUNV(enum UvnMode mode)
+{
+  if (mode == kUvnModeSpherical)
+  {
+    EulerAngles tmpDir = dir_;
+    tmpDir.bank = 0.0f;
+    Matrix<4, 4> tmpMatrix = tmpDir.getObjectToWorldMatrix();
+
+    n_.init(0.0f, 0.0f, 1.0f);
+    n_ = n_ * tmpMatrix;
+
+    //计算target
+    tmpMatrix.setItem(4, 1, pos_.x);
+    tmpMatrix.setItem(4, 2, pos_.y);
+    tmpMatrix.setItem(4, 3, pos_.z);
+
+    target_.init(0.0f, 0.0f, 1.0f);
+    target_ = target_ * tmpMatrix;
+  }
+  else
+  {
+    n_ = target_ - pos_;
+    n_.normalize();
+  }
+
+  v_.init(0.0f, 1.0f, 0.0f);
+  u_ = crossProduct(v_, n_);
+
+  v_ = crossProduct(n_, u_);
+
+  u_.normalize();
+  v_.normalize();
+}
+
 }

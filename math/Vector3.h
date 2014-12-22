@@ -108,6 +108,13 @@ class Vector3
     return sqrt(x * x + y * y + z * z);
   }
 
+  void init(float ax, float ay, float az)
+  {
+    x = ax;
+    y = ay;
+    z = az;
+  }
+
   const static Vector3 kZeroVector3;
 
   float x, y, z;

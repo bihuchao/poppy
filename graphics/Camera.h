@@ -30,6 +30,15 @@ class Camera
   Matrix<4, 4> getMatrixWorldToCamera();
   Matrix<4, 4> getMatrixCameraToPer();
   Matrix<4, 4> getMatrixPerToScreen();
+
+  void buildCameraMatrixByEuler();
+
+  enum UvnMode
+  {
+    kUvnModeSpherical,
+    kUvnModeSimple,
+  };
+  void buildCameraMatrixByUNV(enum UvnMode mode);
  private:
   uint32_t attr_;
   uint32_t state_;
