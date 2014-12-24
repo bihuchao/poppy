@@ -14,6 +14,7 @@
 #include "Camera.h"
 #include "MathUtil.h"
 #include "PolygonFull.h"
+#include "RenderList.h"
 
 using namespace poppy;
 
@@ -27,6 +28,7 @@ int main(int argc, char *argv[])
   Vector3 point2(-t3, -t2, 5.0f);
   Vector3 point3(t3, -t2, 5.0f);
   PolygonFull polygon(0u, 255u, point1, point2, point3);
+  RenderList mainRenderList;
 
   int width = 640;
   int height = 480;
@@ -45,13 +47,15 @@ int main(int argc, char *argv[])
     videoSys.fillSecondary(0u);
 
     polygon.reset();
-    polygon.worldToCamera(camera);
-    polygon.cameraToPerspective(camera);
-    polygon.perspectiveToScreen(camera);
+    mainRenderList.insert(polygon);
+
+    mainRenderList.worldToCamera(camera);
+    mainRenderList.cameraToPerspective(camera);
+    mainRenderList.perspectiveToScreen(camera);
 
     videoSys.lockSecondary();
 
-    polygon.draw(videoSys);
+    mainRenderList.draw(videoSys);
 
     videoSys.unlockSecondary();
 
