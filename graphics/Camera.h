@@ -20,16 +20,16 @@ class Camera
  public:
   Camera(uint32_t attr, const Vector3& pos,
          const EulerAngles& dir, const Vector3& target,
-         float nearClipZ, float farClipZ, float fovH,
-         float fovV, float viewPortWidth, float viewPortHeiht);
+         float nearClipZ, float farClipZ, float fov,
+         float viewPortWidth, float viewPortHeiht);
 
-  Vector3 transformPerToScreen(const Vector3& pos);
-  Vector3 transformCameraToPer(const Vector3& pos);
-  Vector3 transformWorldToCamera(const Vector3& pos);
+  Vector3 transformPerToScreen(const Vector3& pos) const;
+  Vector3 transformCameraToPer(const Vector3& pos) const;
+  Vector3 transformWorldToCamera(const Vector3& pos) const;
 
-  Matrix<4, 4> getMatrixWorldToCamera() { return worldToCamera_; }
-  Matrix<4, 4> getMatrixCameraToPer() { return cameraToPer_; }
-  Matrix<4, 4> getMatrixPerToScreen() { return perToScreen_; }
+  Matrix<4, 4> getMatrixWorldToCamera() const { return worldToCamera_; }
+  Matrix<4, 4> getMatrixCameraToPer() const { return cameraToPer_; }
+  Matrix<4, 4> getMatrixPerToScreen() const { return perToScreen_; }
 
   void buildCameraMatrixByEuler();
 
@@ -51,11 +51,9 @@ class Camera
   Vector3 n_;
   Vector3 target_;
 
-  float viewDistH_;
-  float viewDistV_;
+  float viewDist_;
 
-  float fovH_;
-  float fovV_;
+  float fov_;
 
   float nearClipZ_;
   float farClipZ_;

@@ -13,36 +13,33 @@ namespace poppy
 
 Camera::Camera(uint32_t attr, const Vector3& pos,
        const EulerAngles& dir, const Vector3& target,
-       float fovH, float fovV, float nearClipZ,
-       float farClipZ, float viewPortWidth, float viewPortHeight)
+       float fov, float nearClipZ, float farClipZ,
+       float viewPortWidth, float viewPortHeight)
   :attr_(attr), state_(0u), pos_(pos), dir_(dir), u_(1.0f, 0.0f, 0.0f),
    v_(0.0f, 1.0f, 0.0f), n_(0.0f, 0.0f, 1.0f), target_(target),
-   fovH_(fovH), fovV_(fovV), nearClipZ_(nearClipZ), farClipZ_(farClipZ),
+   fov_(fov), nearClipZ_(nearClipZ), farClipZ_(farClipZ),
    viewPortWidth_(viewPortWidth), viewPortHeight_(viewPortHeight),
    aspectRatio_(viewPortWidth / viewPortHeight)
 {
   viewPlaneWidth_ = 2.0f;
   viewPlaneHeight_ = 2.0f / aspectRatio_;
 
-  float tanFovDiv2 = tan(degToRad(fovH/2.0f));
-  viewDistH_ = (0.5 * viewPlaneWidth_) / tanFovDiv2;
-
-  tanFovDiv2 = tan(degToRad(fovV/2.0f));
-  viewDistV_ = (0.5 * viewPlaneHeight_) / tanFovDiv2;
+  float tanFovDiv2 = tan(degToRad(fov/2.0f));
+  viewDist_ = (0.5 * viewPlaneWidth_) / tanFovDiv2;
 }
 
-Vector3 Camera::transformCameraToPer(const Vector3& pos)
+Vector3 Camera::transformCameraToPer(const Vector3& pos) const
 {
   Vector3 ret;
 
-  ret.x = viewDistH_ * pos.x / pos.z;
-  ret.y = viewDistV_ * pos.y / pos.z;
+  ret.x = viewDist_ * pos.x / pos.z;
+  ret.y = viewDist_ * pos.y / pos.z;
   ret.z = pos.z;
 
   return ret;
 }
 
-Vector3 Camera::transformPerToScreen(const Vector3& pos)
+Vector3 Camera::transformPerToScreen(const Vector3& pos) const
 {
   Vector3 ret = pos;
 
@@ -59,7 +56,7 @@ Vector3 Camera::transformPerToScreen(const Vector3& pos)
   return ret;
 }
 
-Vector3 Camera::transformWorldToCamera(const Vector3& pos)
+Vector3 Camera::transformWorldToCamera(const Vector3& pos) const
 {
   return pos * worldToCamera_;
 }

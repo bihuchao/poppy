@@ -13,6 +13,7 @@
 #include "math/Matrix.h"
 #include "Camera.h"
 #include "MathUtil.h"
+#include "PolygonFull.h"
 
 using namespace poppy;
 
@@ -25,16 +26,15 @@ int main(int argc, char *argv[])
   Vector3 point1(0, t1, 5.0f);
   Vector3 point2(-t3, -t2, 5.0f);
   Vector3 point3(t3, -t2, 5.0f);
-
-  Camera camera(0, Vector3(0.0f, 0.0f, 0.0f),
-                EulerAngles(degToRad(10.0f), degToRad(-10.0f), degToRad(0.0f)),
-                Vector3(0.0f, 0.0f, 0.0f), 90.0f, 90.0f, 0.0f,
-                0.0f, 640.0f, 640.0f);
-  camera.buildCameraMatrixByEuler();
-  Matrix<4, 4> worldToCamera = camera.getMatrixWorldToCamera();
+  PolygonFull polygon(0u, 255u, point1, point2, point3);
 
   int width = 640;
-  int height = 640;
+  int height = 480;
+
+  Camera camera(0, Vector3(0.0f, 0.0f, 3.0f),
+                EulerAngles(degToRad(0.0f), degToRad(0.0f), degToRad(0.0f)),
+                Vector3(0.0f, 0.0f, 0.0f), 90.0f, 0.0f, 0.0f, width, height);
+  camera.buildCameraMatrixByEuler();
 
   VideoSystemSDL videoSys;
   videoSys.createWindow(width, height, 32);
@@ -44,27 +44,14 @@ int main(int argc, char *argv[])
   {
     videoSys.fillSecondary(0u);
 
-    Vector3 tmp1 = point1;
-    Vector3 tmp2 = point2;
-    Vector3 tmp3 = point3;
-
-    tmp1 = tmp1 * worldToCamera;
-    tmp2 = tmp2 * worldToCamera;
-    tmp3 = tmp3 * worldToCamera;
-
-    tmp1 = camera.transformCameraToPer(tmp1);
-    tmp2 = camera.transformCameraToPer(tmp2);
-    tmp3 = camera.transformCameraToPer(tmp3);
-
-    tmp1 = camera.transformPerToScreen(tmp1);
-    tmp2 = camera.transformPerToScreen(tmp2);
-    tmp3 = camera.transformPerToScreen(tmp3);
+    polygon.reset();
+    polygon.worldToCamera(camera);
+    polygon.cameraToPerspective(camera);
+    polygon.perspectiveToScreen(camera);
 
     videoSys.lockSecondary();
 
-    videoSys.drawLine(tmp1.x, tmp1.y, tmp2.x, tmp2.y, 255);
-    videoSys.drawLine(tmp2.x, tmp2.y, tmp3.x, tmp3.y, 255);
-    videoSys.drawLine(tmp3.x, tmp3.y, tmp1.x, tmp1.y, 255);
+    polygon.draw(videoSys);
 
     videoSys.unlockSecondary();
 
