@@ -14,6 +14,8 @@
 
 #include "Vector3.h"
 #include "EulerAngles.h"
+#include "RenderList.h"
+#include "PolygonFull.h"
 
 namespace poppy
 {
@@ -30,6 +32,8 @@ class Polygon
       pvlist_(pvlist)
   { vert_[0] = p1, vert_[1] = p2, vert_[2] = p3; }
 
+  operator PolygonFull() const;
+
   uint32_t state_;
   uint32_t attr_;
   uint32_t color_;
@@ -41,7 +45,10 @@ class Polygon
 class Object
 {
  public:
-  Object();
+  Object(const char *plgfile, uint32_t attr);
+  int insertToRenderList(RenderList *renderList);
+  int transformByMatrix(const Matrix<4, 4>& mt,
+                        PolygonFull::TransMode mode);
  private:
   uint32_t attr_;
   uint32_t state_;

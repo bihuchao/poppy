@@ -15,11 +15,13 @@
 #include "MathUtil.h"
 #include "PolygonFull.h"
 #include "RenderList.h"
+#include "Object.h"
 
 using namespace poppy;
 
 int main(int argc, char *argv[])
 {
+  /*
   float t1 = 1 / cos(degToRad(30.0));
   float t2 = 2 * cos(degToRad(30.0)) - t1;
   float t3 = t1 * cos(degToRad(30.0));
@@ -28,12 +30,14 @@ int main(int argc, char *argv[])
   Vector3 point2(-t3, -t2, 5.0f);
   Vector3 point3(t3, -t2, 5.0f);
   PolygonFull polygon(0u, 255u, point1, point2, point3);
+  */
   RenderList mainRenderList;
+  Object cube("./cube1.plg", 0u);
 
   int width = 640;
   int height = 480;
 
-  Camera camera(0, Vector3(0.0f, 0.0f, 3.0f),
+  Camera camera(0, Vector3(0.0f, 0.0f, -30.0f),
                 EulerAngles(degToRad(0.0f), degToRad(0.0f), degToRad(0.0f)),
                 Vector3(0.0f, 0.0f, 0.0f), 90.0f, 0.0f, 0.0f, width, height);
   camera.buildCameraMatrixByEuler();
@@ -42,12 +46,15 @@ int main(int argc, char *argv[])
   videoSys.createWindow(width, height, 32);
 
   SDL_Event event;
+  float deg = 0.0f;
   while (1)
   {
     videoSys.fillSecondary(0u);
 
-    polygon.reset();
-    mainRenderList.insert(polygon);
+    //polygon.reset();
+    //mainRenderList.insert(polygon);
+    mainRenderList.reset();
+    cube.insertToRenderList(&mainRenderList);
 
     mainRenderList.worldToCamera(camera);
     mainRenderList.cameraToPerspective(camera);

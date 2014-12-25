@@ -9,7 +9,6 @@
 #include <list>
 
 #include "PolygonFull.h"
-#include "Object.h"
 #include "Camera.h"
 
 namespace poppy
@@ -19,7 +18,6 @@ class RenderList
 {
  public:
   RenderList(uint32_t attr = 0u): state_(0u), attr_(attr) { }
-  void insert(const Object& obj);
   void insert(const PolygonFull& poly) { polyList_.push_back(poly); }
 
   void transformByMatrix(const Matrix<4, 4>& mt,
