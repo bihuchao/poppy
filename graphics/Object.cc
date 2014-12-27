@@ -54,10 +54,10 @@ Polygon::operator PolygonFull() const
 }
 
 Object::Object(const char* plgfile, uint32_t attr)
-  :attr_(attr), state_(0u), avgRadius(0.0f),
-   maxRadius(0.0f), ux(1.0f, 0.0f, 0.0f),
-   vy(0.0f, 1.0f, 0.0f), nz(0.0f, 0.0f, 1.0f),
-   pos_(0.0f, 0.0f, 0.0f), id(0u)
+  :attr_(attr), state_(0u), avgRadius_(0.0f),
+   maxRadius_(0.0f), ux_(1.0f, 0.0f, 0.0f),
+   vy_(0.0f, 1.0f, 0.0f), nz_(0.0f, 0.0f, 1.0f),
+   pos_(0.0f, 0.0f, 0.0f), id_(0u)
 {
   std::ifstream infile(plgfile);
   if (!infile)
@@ -81,7 +81,7 @@ Object::Object(const char* plgfile, uint32_t attr)
   }
 
   std::istringstream lineStream(line);
-  if (!(lineStream >> name))
+  if (!(lineStream >> name_))
   {
     LOG_ERROR("Input object name error!\n");
     return;
@@ -109,6 +109,7 @@ Object::Object(const char* plgfile, uint32_t attr)
       continue;
     }
     Vector3 tmpVec;
+    lineStream.clear();
     lineStream.str(line);
     if (!(lineStream >> tmpVec.x)
         || !(lineStream >> tmpVec.y)
@@ -120,8 +121,6 @@ Object::Object(const char* plgfile, uint32_t attr)
     vlistLocal_.push_back(tmpVec);
     vlistTrans_.push_back(tmpVec);
     ++idx;
-
-    lineStream.clear();
   }
 
   if (idx < pointNum)
@@ -156,6 +155,22 @@ Object::Object(const char* plgfile, uint32_t attr)
   if (idx < polyNum)
   {
     LOG_ERROR("Input poly of object error!\n");
+  }
+}
+
+Object::Object(const Object& rhs)
+  :attr_(rhs.attr_), state_(rhs.state_),
+   avgRadius_(rhs.avgRadius_), maxRadius_(rhs.maxRadius_),
+   ux_(rhs.ux_), vy_(rhs.vy_), nz_(rhs.nz_), pos_(rhs.pos_),
+   name_(rhs.name_), id_(rhs.id_), vlistLocal_(rhs.vlistLocal_),
+   vlistTrans_(rhs.vlistTrans_)
+{
+  int num = rhs.polyList_.size();
+  for (int i = 0; i < num; i++)
+  {
+    Polygon poly(0u, 255, &vlistLocal_, rhs.polyList_[i].vert_[0],
+                 rhs.polyList_[i].vert_[1], rhs.polyList_[i].vert_[2]);
+    polyList_.push_back(poly);
   }
 }
 
@@ -206,7 +221,46 @@ int Object::transformByMatrix(const Matrix<4, 4>& mt,
       return -1;
   }
 
+  if (mode == PolygonFull::kLocalOnly)
+  {
+    ux_ = ux_ * mt;
+    vy_ = vy_ * mt;
+    nz_ = nz_ * mt;
+  }
+
   return 0;
+}
+
+int Object::transformToWorld(const Vector3& pos, const EulerAngles* angles)
+{
+  if (angles == NULL)
+  {
+    //只平移不旋转
+    moveNotByMatrix(pos);
+  }
+  else
+  {
+    Matrix<4, 4> mt = angles->getObjectToWorldMatrix();
+    transformByMatrix(mt, PolygonFull::kLocalOnly);
+
+    moveNotByMatrix(pos);
+    pos_ = pos;
+  }
+
+  return 0;
+}
+
+void Object::moveNotByMatrix(const Vector3& pos)
+{
+  Vector3 move = pos - pos_;
+  for (std::vector<Vector3>::iterator iter = vlistLocal_.begin();
+      iter != vlistLocal_.end(); ++iter)
+  {
+    iter->x += move.x;
+    iter->y += move.y;
+    iter->z += move.z;
+  }
+  pos_ = pos;
 }
 
 }

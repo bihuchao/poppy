@@ -22,8 +22,8 @@ class EulerAngles
   void identity() { heading = pitch = bank = 0.0f; }
   void canonize();
 
-  Matrix<4, 4> getObjectToWorldMatrix();
-  Matrix<4, 4> getWorldToObjectMatrix();
+  Matrix<4, 4> getObjectToWorldMatrix() const;
+  Matrix<4, 4> getWorldToObjectMatrix() const;
 
   float heading, pitch, bank;
 };

@@ -41,7 +41,7 @@ void EulerAngles::canonize()
   heading = WrapPi(heading);
 }
 
-Matrix<4, 4> EulerAngles::getObjectToWorldMatrix()
+Matrix<4, 4> EulerAngles::getObjectToWorldMatrix() const
 {
   Matrix<4, 4> ret;
   ret.zero();
@@ -78,7 +78,7 @@ Matrix<4, 4> EulerAngles::getObjectToWorldMatrix()
   return ret;
 }
 
-Matrix<4, 4> EulerAngles::getWorldToObjectMatrix()
+Matrix<4, 4> EulerAngles::getWorldToObjectMatrix() const
 {
   Matrix<4, 4> ret;
   ret.zero();

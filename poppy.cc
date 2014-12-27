@@ -32,12 +32,12 @@ int main(int argc, char *argv[])
   PolygonFull polygon(0u, 255u, point1, point2, point3);
   */
   RenderList mainRenderList;
-  Object cube("./cube1.plg", 0u);
+  Object cube("./plg/towerg1_8b.plg", 0u);
 
   int width = 640;
   int height = 480;
 
-  Camera camera(0, Vector3(0.0f, 0.0f, -30.0f),
+  Camera camera(0, Vector3(0.0f, 20.0f, 0.0f),
                 EulerAngles(degToRad(0.0f), degToRad(0.0f), degToRad(0.0f)),
                 Vector3(0.0f, 0.0f, 0.0f), 90.0f, 0.0f, 0.0f, width, height);
   camera.buildCameraMatrixByEuler();
@@ -54,7 +54,11 @@ int main(int argc, char *argv[])
     //polygon.reset();
     //mainRenderList.insert(polygon);
     mainRenderList.reset();
-    cube.insertToRenderList(&mainRenderList);
+    EulerAngles revolve(degToRad(deg), 0.0f, 0.0f);
+
+    Object tmp = cube;
+    tmp.transformToWorld(Vector3(0.0f, 0.0f, 100.0f), &revolve);
+    tmp.insertToRenderList(&mainRenderList);
 
     mainRenderList.worldToCamera(camera);
     mainRenderList.cameraToPerspective(camera);
@@ -68,6 +72,11 @@ int main(int argc, char *argv[])
 
     videoSys.flipDisplay();
 
+    deg += 1.0f;
+    if (deg >= 360.0f)
+    {
+      deg = 0.0f;
+    }
     SDL_Delay(10);
 
     if (SDL_PollEvent(&event))

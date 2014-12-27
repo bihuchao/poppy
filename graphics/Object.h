@@ -46,26 +46,31 @@ class Object
 {
  public:
   Object(const char *plgfile, uint32_t attr);
+  Object(const Object& rhs);
+
+  Object& operator=(const Object& rhs);
   int insertToRenderList(RenderList *renderList);
   int transformByMatrix(const Matrix<4, 4>& mt,
                         PolygonFull::TransMode mode);
+  int transformToWorld(const Vector3& pos, const EulerAngles* angles);
  private:
   uint32_t attr_;
   uint32_t state_;
 
-  float avgRadius;
-  float maxRadius;
+  float avgRadius_;
+  float maxRadius_;
 
-  EulerAngles dir;
-  Vector3 ux, vy, nz;
+  Vector3 ux_, vy_, nz_;
 
   Vector3 pos_;
-  std::string name;
-  uint32_t id;
+  std::string name_;
+  uint32_t id_;
   std::vector<Vector3> vlistLocal_;
   std::vector<Vector3> vlistTrans_;
 
   std::vector<Polygon> polyList_;
+
+  void moveNotByMatrix(const Vector3& pos);
 };
 
 }
