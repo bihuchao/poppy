@@ -10,7 +10,7 @@
 #include <cstdio>
 
 #include "Object.h"
-#include "logger.h"
+#include "Logger.h"
 #include "Camera.h"
 
 namespace

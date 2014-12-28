@@ -4,7 +4,7 @@
 // Author: dingcongjun (dingcj)
 
 #include "RenderList.h"
-#include "logger.h"
+#include "Logger.h"
 
 namespace poppy
 {
