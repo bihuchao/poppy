@@ -5,12 +5,12 @@
 
 #include "SDL/SDL.h"
 
-#include "video/Bitmap.h"
-#include "video/FrameBuffer.h"
-#include "logger/Logger.h"
-#include "video/FrameBufferSDL.h"
-#include "video/VideoSystemSDL.h"
-#include "math/Matrix.h"
+#include "Bitmap.h"
+#include "FrameBuffer.h"
+#include "Logger.h"
+#include "FrameBufferSDL.h"
+#include "VideoSystemSDL.h"
+#include "Matrix.h"
 #include "Camera.h"
 #include "MathUtil.h"
 #include "PolygonFull.h"

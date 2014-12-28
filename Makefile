@@ -1,33 +1,26 @@
-TARGET=poppy.exe
-CPP=g++
-CFLAGS= -g -Wall -I./logger -I./video -I./math -I./graphics
-LFLAGS=-lSDL
+.PHONY: all clean
 
-OS:=$(shell uname -s)
-IS_MINGW:=$(shell echo $(OS)|grep -i MINGW)
+ROOT = $(realpath .)
+DIRS = $(ROOT)/code/3dmath/src \
+			 $(ROOT)/code/graphics/src \
+			 $(ROOT)/code/logger/src \
+			 $(ROOT)/code/video/src \
+			 $(ROOT)/code/poppy/src
 
-ifdef IS_MINGW
-LFLAGS+=-lmingw32 -lSDLmain -lSDL
-endif
+RM = rm
+RMFLAGS = -rf
+RMS = $(ROOT)/build/exes/*.exe $(ROOT)/build/libs/*.a \
+			$(ROOT)/build/exes/*.txt
 
-SRCS=video/FrameBuffer.cc video/Bitmap.cc \
-		 logger/Logger.cc math/Vector3.cc math/Matrix.cc\
-		 video/FrameBufferSDL.cc \
-		 video/VideoSystem.cc video/VideoSystemSDL.cc \
-		 math/Line2.cc math/EulerAngles.cc\
-		 graphics/Object.cc graphics/Camera.cc\
-		 graphics/PolygonFull.cc graphics/Object.cc\
-		 graphics/RenderList.cc\
-		 poppy.cc
-OBJS=$(patsubst %.cc, %.o, $(SRCS))
+all clean:
+	@set -e; \
+		for dir in $(DIRS); \
+		do \
+			cd $$dir && $(MAKE) ROOT=$(ROOT) $@; \
+		done
+		@set -e; \
+			if [ "$(MAKECMDGOALS)" = "clean" ]; then $(RM) $(RMFLAGS) $(RMS); fi
+		@echo ""
+		@echo ":-) Completed"
+		@echo ""
 
-all: $(TARGET)
-
-$(TARGET): $(OBJS)
-	$(CPP) $^ -o $@ $(LFLAGS)
-
-%.o: %.cc
-	$(CPP) -c $(CFLAGS) -o $@ $^
-
-clean:
-	rm -rf $(TARGET) $(OBJS) stderr.txt stdout.txt
