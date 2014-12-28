@@ -77,6 +77,7 @@ int main(int argc, char *argv[])
     {
       deg = 0.0f;
     }
+    LOG_ERROR("deg is %f\n", deg);
     SDL_Delay(10);
 
     if (SDL_PollEvent(&event))

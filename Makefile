@@ -5,7 +5,8 @@ DIRS = $(ROOT)/code/3dmath/src \
 			 $(ROOT)/code/graphics/src \
 			 $(ROOT)/code/logger/src \
 			 $(ROOT)/code/video/src \
-			 $(ROOT)/code/poppy/src
+			 $(ROOT)/code/poppy/src \
+			 $(ROOT)/code/logserver/src
 
 RM = rm
 RMFLAGS = -rf
