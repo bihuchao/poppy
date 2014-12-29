@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
   PolygonFull polygon(0u, 255u, point1, point2, point3);
   */
   RenderList mainRenderList;
-  Object cube("./plg/cube2_8b.plg", 0u);
+  Object cube("./plg/tank3_8b.plg", 0u);
 
   int width = 640;
   int height = 480;

@@ -91,12 +91,13 @@ int FrameBuffer::drawLine(uint8_t *buf, int x1, int y1, int x2, int y2, uint32_t
     return -1;
   }
 
-  if (line.vLine())
+  Line2 drawLine(cx1, cy1, cx2, cy2);
+  if (drawLine.vLine())
   {
     drawVLine(buf, cy1, cy2, cx1, color);
     return 0;
   }
-  else if (line.hLine())
+  else if (drawLine.hLine())
   {
     drawHLine(buf, cx1, cx2, cy1, color);
     return 0;
