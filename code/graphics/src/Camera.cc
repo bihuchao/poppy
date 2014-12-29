@@ -79,6 +79,7 @@ void Camera::buildCameraMatrixByUNV(enum UvnMode mode)
     tmpDir.bank = 0.0f;
     Matrix<4, 4> tmpMatrix = tmpDir.getObjectToWorldMatrix();
 
+    //n表示方向，不需要平移
     n_.init(0.0f, 0.0f, 1.0f);
     n_ = n_ * tmpMatrix;
 
@@ -103,6 +104,27 @@ void Camera::buildCameraMatrixByUNV(enum UvnMode mode)
 
   u_.normalize();
   v_.normalize();
+
+  //构建世界坐标到相机坐标的转换矩阵
+  worldToCamera_.zero();
+  worldToCamera_.setItem(1, 1, u_.x);
+  worldToCamera_.setItem(2, 1, u_.y);
+  worldToCamera_.setItem(3, 1, u_.z);
+
+  worldToCamera_.setItem(1, 2, v_.x);
+  worldToCamera_.setItem(2, 2, v_.y);
+  worldToCamera_.setItem(3, 2, v_.z);
+
+  worldToCamera_.setItem(1, 3, n_.x);
+  worldToCamera_.setItem(2, 3, n_.y);
+  worldToCamera_.setItem(3, 3, n_.z);
+
+  //平移部分
+  worldToCamera_.setItem(4, 1, -pos_.x);
+  worldToCamera_.setItem(4, 2, -pos_.y);
+  worldToCamera_.setItem(4, 3, -pos_.z);
+
+  worldToCamera_.setItem(4, 4, 1);
 }
 
 }

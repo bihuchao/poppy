@@ -147,7 +147,7 @@ Object::Object(const char* plgfile, uint32_t attr)
       LOG_ERROR("Input poly of object error!\n");
       return;
     }
-    Polygon poly(0u, 255, &vlistLocal_, p1, p2, p3);
+    Polygon poly(0u, 255, &vlistTrans_, p1, p2, p3);
     polyList_.push_back(poly);
     ++idx;
   }
@@ -168,7 +168,7 @@ Object::Object(const Object& rhs)
   int num = rhs.polyList_.size();
   for (int i = 0; i < num; i++)
   {
-    Polygon poly(0u, 255, &vlistLocal_, rhs.polyList_[i].vert_[0],
+    Polygon poly(0u, 255, &vlistTrans_, rhs.polyList_[i].vert_[0],
                  rhs.polyList_[i].vert_[1], rhs.polyList_[i].vert_[2]);
     polyList_.push_back(poly);
   }
@@ -179,6 +179,11 @@ int Object::insertToRenderList(RenderList *renderList)
   for (std::vector<Polygon>::iterator iter = polyList_.begin();
       iter != polyList_.end(); ++iter)
   {
+    if (iter->state_ & PolygonFull::kPolyStateBackface)
+    {
+      continue;
+    }
+
     renderList->insert(PolygonFull(*iter));
   }
 
@@ -231,36 +236,81 @@ int Object::transformByMatrix(const Matrix<4, 4>& mt,
   return 0;
 }
 
-int Object::transformToWorld(const Vector3& pos, const EulerAngles* angles)
+int Object::transformToWorld(const Vector3& pos, const EulerAngles* angles,
+                             PolygonFull::TransMode mode)
 {
   if (angles == NULL)
   {
     //只平移不旋转
-    moveNotByMatrix(pos);
+    moveNotByMatrix(pos, mode);
   }
   else
   {
     Matrix<4, 4> mt = angles->getObjectToWorldMatrix();
-    transformByMatrix(mt, PolygonFull::kLocalOnly);
+    //添加平移部分
+    Vector3 move = pos - pos_;
+    mt.setItem(4, 1, move.x);
+    mt.setItem(4, 2, move.y);
+    mt.setItem(4, 3, move.z);
 
-    moveNotByMatrix(pos);
+    transformByMatrix(mt, mode);
+
     pos_ = pos;
   }
 
   return 0;
 }
 
-void Object::moveNotByMatrix(const Vector3& pos)
+void Object::moveNotByMatrix(const Vector3& pos, PolygonFull::TransMode mode)
 {
   Vector3 move = pos - pos_;
-  for (std::vector<Vector3>::iterator iter = vlistLocal_.begin();
-      iter != vlistLocal_.end(); ++iter)
+  if (mode == PolygonFull::kLocalToTrans)
   {
-    iter->x += move.x;
-    iter->y += move.y;
-    iter->z += move.z;
+    for (int i = 0; i < vlistLocal_.size(); i++)
+    {
+      vlistTrans_[i].x = vlistLocal_[i].x + move.x;
+      vlistTrans_[i].y = vlistLocal_[i].y + move.y;
+      vlistTrans_[i].z = vlistLocal_[i].z + move.z;
+    }
   }
+  else //local only
+  {
+    for (std::vector<Vector3>::iterator iter = vlistLocal_.begin();
+        iter != vlistLocal_.end(); ++iter)
+    {
+      iter->x += move.x;
+      iter->y += move.y;
+      iter->z += move.z;
+    }
+  }
+
   pos_ = pos;
+}
+
+void Object::removeBackFaces(const Camera& camera)
+{
+  for (std::vector<Polygon>::iterator iter = polyList_.begin();
+      iter != polyList_.end(); ++iter)
+  {
+    //if (!(iter->state_ & PolygonFull::kPolyStateActive))
+    //{
+    //  continue;
+    //}
+
+    Vector3 p0 = (*(iter->pvlist_))[iter->vert_[0]];
+    Vector3 p1 = (*(iter->pvlist_))[iter->vert_[1]];
+    Vector3 p2 = (*(iter->pvlist_))[iter->vert_[2]];
+
+    Vector3 u = p1 - p0;
+    Vector3 v = p2 - p0;
+    Vector3 n = crossProduct(u, v);
+    Vector3 view = camera.getPos() - p0;
+
+    if (n * view <= 0.0f)
+    {
+      iter->state_ |= PolygonFull::kPolyStateBackface;
+    }
+  }
 }
 
 }

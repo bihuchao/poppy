@@ -24,7 +24,7 @@ class PolygonFull
  public:
   PolygonFull(uint32_t attr, uint32_t color,
               const Vector3& p1, const Vector3& p2, const Vector3& p3)
-   : state_(0u), attr_(attr), color_(color)
+   : state_(kPolyStateActive), attr_(attr), color_(color)
   {
     vlistLocal_[0] = p1;
     vlistLocal_[1] = p2;
@@ -40,6 +40,13 @@ class PolygonFull
     kLocalOnly,
     kTransOnly,
     kLocalToTrans
+  };
+
+  enum PolygonState
+  {
+    kPolyStateActive,
+    kPolyStateClipped,
+    kPolyStateBackface
   };
   int transformByMatrix(const Matrix<4, 4>& mt, TransMode mode);
   void worldToCamera(const Camera& camera);

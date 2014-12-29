@@ -32,15 +32,16 @@ int main(int argc, char *argv[])
   PolygonFull polygon(0u, 255u, point1, point2, point3);
   */
   RenderList mainRenderList;
-  Object cube("./plg/tank3_8b.plg", 0u);
+  Object cube("./plg/cube2_8b.plg", 0u);
 
   int width = 640;
   int height = 480;
 
-  Camera camera(0, Vector3(0.0f, 0.0f, 0.0f),
+  Camera camera(0, Vector3(0.0f, -20.0f, 0.0f),
                 EulerAngles(degToRad(0.0f), degToRad(0.0f), degToRad(0.0f)),
-                Vector3(0.0f, 0.0f, 0.0f), 90.0f, 0.0f, 0.0f, width, height);
-  camera.buildCameraMatrixByEuler();
+                Vector3(0.0f, 0.0f, 50.0f), 90.0f, 0.0f, 0.0f, width, height);
+  //camera.buildCameraMatrixByEuler();
+  camera.buildCameraMatrixByUNV(Camera::kUvnModeSimple);
 
   VideoSystemSDL videoSys;
   videoSys.createWindow(width, height, 32);
@@ -57,7 +58,8 @@ int main(int argc, char *argv[])
     EulerAngles revolve(degToRad(deg), 0.0f, 0.0f);
 
     Object tmp = cube;
-    tmp.transformToWorld(Vector3(0.0f, 0.0f, 20.0f), &revolve);
+    tmp.transformToWorld(Vector3(0.0f, 0.0f, 30.0f), &revolve, PolygonFull::kLocalToTrans);
+    tmp.removeBackFaces(camera);
     tmp.insertToRenderList(&mainRenderList);
 
     mainRenderList.worldToCamera(camera);
@@ -77,7 +79,7 @@ int main(int argc, char *argv[])
     {
       deg = 0.0f;
     }
-    LOG_ERROR("deg is %f\n", deg);
+
     SDL_Delay(10);
 
     if (SDL_PollEvent(&event))

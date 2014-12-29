@@ -32,6 +32,7 @@ class Camera
   Matrix<4, 4> getMatrixPerToScreen() const { return perToScreen_; }
 
   void buildCameraMatrixByEuler();
+  Vector3 getPos() const { return pos_; }
 
   enum UvnMode
   {

@@ -28,7 +28,7 @@ class Polygon
   Polygon(uint32_t attr, uint32_t color,
           std::vector<Vector3>* pvlist,
           int p1, int p2, int p3)
-    : state_(0u), attr_(attr), color_(color),
+    : state_(PolygonFull::kPolyStateActive), attr_(attr), color_(color),
       pvlist_(pvlist)
   { vert_[0] = p1, vert_[1] = p2, vert_[2] = p3; }
 
@@ -52,7 +52,9 @@ class Object
   int insertToRenderList(RenderList *renderList);
   int transformByMatrix(const Matrix<4, 4>& mt,
                         PolygonFull::TransMode mode);
-  int transformToWorld(const Vector3& pos, const EulerAngles* angles);
+  int transformToWorld(const Vector3& pos, const EulerAngles* angles,
+                       PolygonFull::TransMode mode);
+  void removeBackFaces(const Camera& camera);
  private:
   uint32_t attr_;
   uint32_t state_;
@@ -70,7 +72,7 @@ class Object
 
   std::vector<Polygon> polyList_;
 
-  void moveNotByMatrix(const Vector3& pos);
+  void moveNotByMatrix(const Vector3& pos, PolygonFull::TransMode mode);
 };
 
 }
