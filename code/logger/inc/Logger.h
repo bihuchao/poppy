@@ -7,6 +7,7 @@
 #define POPPY_LOGGER_LOGGER_H
 
 #include <stdio.h>
+#include <stdint.h>
 
 #include <string>
 
