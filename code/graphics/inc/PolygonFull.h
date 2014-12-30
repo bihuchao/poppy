@@ -42,13 +42,22 @@ class PolygonFull
     kLocalToTrans
   };
 
-  enum PolygonState
-  {
-    kPolyStateActive,
-    kPolyStateClipped,
-    kPolyStateBackface
-  };
-  int transformByMatrix(const Matrix<4, 4>& mt, TransMode mode);
+  static const uint32_t kPolyStateActive      = 0x0001;
+  static const uint32_t kPolyStateClipped     = 0x0002;
+  static const uint32_t kPolyStateBackface    = 0x0004;
+
+  static const uint32_t kPolyAttr2Side        = 0x0001;
+  static const uint32_t kPolyAttrTransparent  = 0x0002;
+  static const uint32_t kPolyAttr8BitColor    = 0x0004;
+  static const uint32_t kPolyAttrRgb16        = 0x0008;
+  static const uint32_t kPolyAttrRgb24        = 0x0010;
+
+  static const uint32_t kPolyAttrShadeModePure      = 0x0020;
+  static const uint32_t kPolyAttrShadeModeFlat      = 0x0040;
+  static const uint32_t kPolyAttrShadeModeGouraud   = 0x0080;
+  static const uint32_t kPolyAttrShadeModePhong     = 0x0100;
+
+  int transformByMatrix(const Matrix<4, 4>& mt, uint32_t mode);
   void worldToCamera(const Camera& camera);
   void cameraToPerspective(const Camera& camera);
   void perspectiveToScreen(const Camera& camera);

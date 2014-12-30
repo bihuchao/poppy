@@ -9,10 +9,17 @@
 namespace poppy
 {
 
-int PolygonFull::transformByMatrix(const Matrix<4, 4>& mt, TransMode mode)
+int PolygonFull::transformByMatrix(const Matrix<4, 4>& mt, uint32_t mode)
 {
   Vector3 resault;
   int ret = 0;
+
+  if (!(state_ & kPolyStateActive)
+      || (state_ & kPolyStateClipped)
+      || (state_ & kPolyStateBackface))
+  {
+    return 0;
+  }
 
   switch (mode)
   {
@@ -46,6 +53,13 @@ int PolygonFull::transformByMatrix(const Matrix<4, 4>& mt, TransMode mode)
 
 void PolygonFull::worldToCamera(const Camera& camera)
 {
+  if (!(state_ & kPolyStateActive)
+      || (state_ & kPolyStateClipped)
+      || (state_ & kPolyStateBackface))
+  {
+    return;
+  }
+
   for (int i = 0; i < 3; i++)
   {
     vlistTrans_[i] = camera.transformWorldToCamera(vlistTrans_[i]);
@@ -54,6 +68,13 @@ void PolygonFull::worldToCamera(const Camera& camera)
 
 void PolygonFull::cameraToPerspective(const Camera& camera)
 {
+  if (!(state_ & kPolyStateActive)
+      || (state_ & kPolyStateClipped)
+      || (state_ & kPolyStateBackface))
+  {
+    return;
+  }
+
   for (int i = 0; i < 3; i++)
   {
     vlistTrans_[i] = camera.transformCameraToPer(vlistTrans_[i]);
@@ -62,6 +83,13 @@ void PolygonFull::cameraToPerspective(const Camera& camera)
 
 void PolygonFull::perspectiveToScreen(const Camera& camera)
 {
+  if (!(state_ & kPolyStateActive)
+      || (state_ & kPolyStateClipped)
+      || (state_ & kPolyStateBackface))
+  {
+    return;
+  }
+
   for (int i = 0; i < 3; i++)
   {
     vlistTrans_[i] = camera.transformPerToScreen(vlistTrans_[i]);
@@ -70,6 +98,13 @@ void PolygonFull::perspectiveToScreen(const Camera& camera)
 
 void PolygonFull::draw(VideoSystem& videoSys)
 {
+  if (!(state_ & kPolyStateActive)
+      || (state_ & kPolyStateClipped)
+      || (state_ & kPolyStateBackface))
+  {
+    return;
+  }
+
   videoSys.drawLine(vlistTrans_[0].x, vlistTrans_[0].y,
                     vlistTrans_[1].x, vlistTrans_[1].y, color_);
   videoSys.drawLine(vlistTrans_[1].x, vlistTrans_[1].y,

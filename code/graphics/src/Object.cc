@@ -179,7 +179,9 @@ int Object::insertToRenderList(RenderList *renderList)
   for (std::vector<Polygon>::iterator iter = polyList_.begin();
       iter != polyList_.end(); ++iter)
   {
-    if (iter->state_ & PolygonFull::kPolyStateBackface)
+    if (!(iter->state_ & PolygonFull::kPolyStateActive)
+        || (iter->state_ & PolygonFull::kPolyStateBackface)
+        || (iter->state_ & PolygonFull::kPolyStateClipped))
     {
       continue;
     }
@@ -292,10 +294,13 @@ void Object::removeBackFaces(const Camera& camera)
   for (std::vector<Polygon>::iterator iter = polyList_.begin();
       iter != polyList_.end(); ++iter)
   {
-    //if (!(iter->state_ & PolygonFull::kPolyStateActive))
-    //{
-    //  continue;
-    //}
+    if (!(iter->state_ & PolygonFull::kPolyStateActive)
+        || (iter->state_ & PolygonFull::kPolyStateBackface)
+        || (iter->state_ & PolygonFull::kPolyStateClipped)
+        || (iter->attr_ & PolygonFull::kPolyAttr2Side))
+    {
+      continue;
+    }
 
     Vector3 p0 = (*(iter->pvlist_))[iter->vert_[0]];
     Vector3 p1 = (*(iter->pvlist_))[iter->vert_[1]];
