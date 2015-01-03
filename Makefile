@@ -8,6 +8,8 @@ DIRS = $(ROOT)/code/3dmath/src \
 			 $(ROOT)/code/poppy/src \
 			 $(ROOT)/code/logserver/src
 
+DIRS += $(ROOT)/test/solid/src
+
 RM = rm
 RMFLAGS = -rf
 RMS = $(ROOT)/build/exes/*.exe $(ROOT)/build/libs/*.a \

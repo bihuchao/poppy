@@ -137,6 +137,20 @@ int VideoSystem::drawLine(int x1, int y1, int x2, int y2, uint32_t color)
     return -1;
   }
 
+  if ((x1 == x2) && (y1 == y2))
+  {
+    if ((x1 > 0) && (x1 < width_ - 1)
+        && (y1 > 0) && (y1 < height_ - 1))
+    {
+      drawPixel(x1, y1, color); 
+      return 0;
+    }
+    else
+    {
+      LOG_ERROR("point1 is equal to point2, point is not in screeen!!!\n"); 
+      return -1;
+    }
+  }
   return secondary_->drawLine(lockedSecondaryBuf_, x1, y1, x2, y2, color);
 }
 

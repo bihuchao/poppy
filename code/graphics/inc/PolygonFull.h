@@ -62,12 +62,16 @@ class PolygonFull
   void cameraToPerspective(const Camera& camera);
   void perspectiveToScreen(const Camera& camera);
   void draw(VideoSystem& videoSys);
+  void drawSolid(VideoSystem& videoSys);
   void reset()
   {
     memcpy(vlistTrans_, vlistLocal_, sizeof(vlistTrans_));
   }
 
  private:
+  static bool PointCompareY(const Vector3& lhs, const Vector3& rhs) 
+  { return lhs.y < rhs.y; }
+
   uint32_t state_;
   uint32_t attr_;
   uint32_t color_;

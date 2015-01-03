@@ -61,6 +61,15 @@ void RenderList::draw(VideoSystem& videoSys)
   }
 }
 
+void RenderList::drawSolid(VideoSystem& videoSys)
+{
+  for (std::list<PolygonFull>::iterator iter = polyList_.begin();
+        iter != polyList_.end(); ++iter)
+  {
+    iter->drawSolid(videoSys);
+  }
+}
+
 void RenderList::reset()
 {
   polyList_.clear();

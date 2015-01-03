@@ -27,6 +27,7 @@ class RenderList
   void cameraToPerspective(const Camera& camera);
   void perspectiveToScreen(const Camera& camera);
   void draw(VideoSystem& videoSys);
+  void drawSolid(VideoSystem& videoSys);
   void reset();
  private:
   uint32_t state_;
