@@ -70,6 +70,9 @@ class Camera
   Matrix<4, 4> worldToCamera_;
   Matrix<4, 4> cameraToPer_;
   Matrix<4, 4> perToScreen_;
+
+  void buildPerspectiveMatrix();
+  void buildScreenMatrix();
 };
 
 }

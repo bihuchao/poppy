@@ -8,6 +8,7 @@
 #include <sstream>
 #include <cctype>
 #include <cstdio>
+#include <stdint.h>
 
 #include "Object.h"
 #include "Logger.h"
@@ -41,6 +42,22 @@ inline bool isNoteLine(const std::string& str)
 
   return ret;
 }
+
+const uint16_t kPlxRgbMask        = 0x8000;
+const uint16_t kPlxShadeMask      = 0x6000;
+const uint16_t kPlx2SidedMask     = 0x8000;
+const uint16_t kPlxColorMask      = 0x0fff;
+
+const uint16_t kPlxColorModeRgb       = 0x8000;
+const uint16_t kPlxColorModeIndexed   = 0x0000;
+
+const uint16_t kPlx2SidedFlag     = 0x1000;
+const uint16_t kPlx1SidedFlag     = 0x0000;
+
+const uint16_t kPlxShadeModePure      = 0x0000;
+const uint16_t kPlxShadeModeFlat      = 0x2000;
+const uint16_t kPlxShadeModeGouraud   = 0x4000;
+const uint16_t kPlxShadeModePhong     = 0x6000;
 
 }
 
@@ -140,14 +157,69 @@ Object::Object(const char* plgfile, uint32_t attr)
     uint32_t des;
     int num;
     int p1, p2, p3;
-    int ret = sscanf(line.c_str(), "%x %d %d %d %d",
+    int ret = 0;
+    if (line[0] == '0' && (line[1] == 'x' || line[1] == 'X'))
+    {
+      ret = sscanf(line.c_str(), "%x %d %d %d %d",
                      &des, &num, &p1, &p2, &p3);
+    }
+    else
+    {
+      ret = sscanf(line.c_str(), "%d %d %d %d %d",
+                     &des, &num, &p1, &p2, &p3);
+    }
+
     if (ret == -1 || num != 3)
     {
       LOG_ERROR("Input poly of object error!\n");
       return;
     }
-    Polygon poly(0u, 255, &vlistTrans_, p1, p2, p3);
+
+    uint32_t attr = 0u;
+    uint32_t color = 0u;
+    uint32_t shadeMode = 0u;
+
+    if (des & kPlx2SidedFlag)
+    {
+      attr |= PolygonFull::kPolyAttr2Side;
+    }
+
+    if (des & kPlxColorModeRgb)
+    {
+      attr |= PolygonFull::kPolyAttrRgb24;
+
+      int reg = ((des & 0x0f00) >> 8) * 16;
+      int green = ((des & 0x00f0) >> 4) * 16;
+      int blue = (des & 0x000f) * 16;
+
+      color = (reg << 16) | (green << 8) | blue;
+    }
+    else
+    {
+      LOG_ERROR("Only support rgb!!!!\n");
+    }
+
+    shadeMode = des & kPlxShadeMask;
+    switch (shadeMode)
+    {
+      case kPlxShadeModePure:
+        attr |= PolygonFull::kPolyAttrShadeModePure;
+        break;
+      case kPlxShadeModeFlat:
+        attr |= PolygonFull::kPolyAttrShadeModeFlat;
+        break;
+      case kPlxShadeModeGouraud:
+        attr |= PolygonFull::kPolyAttrShadeModeGouraud;
+        break;
+      case kPlxShadeModePhong:
+        attr |= PolygonFull::kPolyAttrShadeModePhong;
+        break;
+      default:
+        LOG_ERROR("not support shade mode - %x\n", shadeMode);
+        break;
+    }
+
+    Polygon poly(attr, color, &vlistTrans_, p1, p2, p3);
     polyList_.push_back(poly);
     ++idx;
   }
@@ -168,7 +240,7 @@ Object::Object(const Object& rhs)
   int num = rhs.polyList_.size();
   for (int i = 0; i < num; i++)
   {
-    Polygon poly(0u, 255, &vlistTrans_, rhs.polyList_[i].vert_[0],
+    Polygon poly(0u, rhs.polyList_[i].color_, &vlistTrans_, rhs.polyList_[i].vert_[0],
                  rhs.polyList_[i].vert_[1], rhs.polyList_[i].vert_[2]);
     polyList_.push_back(poly);
   }

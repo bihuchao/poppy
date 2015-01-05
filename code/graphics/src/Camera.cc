@@ -44,12 +44,11 @@ Vector3 Camera::transformPerToScreen(const Vector3& pos) const
   Vector3 ret = pos;
 
   //先根据视平面和屏幕的比例进行一次缩放
-  ret.x = ret.x * viewPortWidth_ / viewPlaneWidth_;
-  ret.x += viewPortWidth_ / 2.0f;
+  float alpha = 0.5 * viewPortWidth_ - 0.5;
+  float beta = 0.5 * viewPortHeight_ - 0.5;
 
-  ret.y = ret.y * viewPortHeight_ / viewPlaneHeight_;
-  ret.y += viewPortHeight_ / 2.0f;
-  ret.y = -ret.y + viewPortHeight_ - 1;
+  ret.x = alpha + alpha * pos.x;
+  ret.y = beta - beta * pos.y;
 
   ret.z = pos.z;
 
@@ -69,6 +68,9 @@ void Camera::buildCameraMatrixByEuler()
   worldToCamera_.setItem(4, 1, -pos_.x);
   worldToCamera_.setItem(4, 2, -pos_.y);
   worldToCamera_.setItem(4, 3, -pos_.z);
+
+  buildPerspectiveMatrix();
+  buildScreenMatrix();
 }
 
 void Camera::buildCameraMatrixByUNV(enum UvnMode mode)
@@ -125,6 +127,33 @@ void Camera::buildCameraMatrixByUNV(enum UvnMode mode)
   worldToCamera_.setItem(4, 3, -pos_.z);
 
   worldToCamera_.setItem(4, 4, 1);
+
+  buildPerspectiveMatrix();
+  buildScreenMatrix();
+}
+
+void Camera::buildPerspectiveMatrix()
+{
+  cameraToPer_.zero();
+
+  cameraToPer_.setItem(1, 1, viewDist_);
+  cameraToPer_.setItem(2, 2, viewDist_);
+  cameraToPer_.setItem(3, 3, 1.0f);
+  cameraToPer_.setItem(3, 4, 1.0f);
+}
+
+void Camera::buildScreenMatrix()
+{
+  float alpha = 0.5 * viewPortWidth_ - 0.5;
+  float beta = 0.5 * viewPortHeight_ - 0.5;
+
+  perToScreen_.zero();
+  perToScreen_.setItem(1, 1, alpha);
+  perToScreen_.setItem(2, 2, -beta);
+  perToScreen_.setItem(3, 1, alpha);
+  perToScreen_.setItem(3, 2, beta);
+  perToScreen_.setItem(3, 3, 1);
+  perToScreen_.setItem(4, 4, 1);
 }
 
 }
