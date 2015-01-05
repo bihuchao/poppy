@@ -1,21 +1,34 @@
-.PHONY:all clean
+
+CFLAGS = -Wall
 
 MKDIR = mkdir
 RM = rm
 RMFLAGS = -rf
+
+ifeq ("$(MAKECMDGOALS)", "")
+MAKECMDGOALS = release
+endif
+
+ifeq ("$(MAKECMDGOALS)", "release")
+DIR_OBJS = robjs
+CFLAGS += -gdwarf-2 -O2
+endif
+
+ifeq ("$(MAKECMDGOALS)", "debug")
+DIR_OBJS = dobjs
+CFLAGS += -gdwarf-2 -g3
+endif
 
 CPP = g++
 CC = gcc
 AR = ar
 ARFLAGS = crs
 
-DIR_OBJS = objs
-DIR_DEPS = deps
-DIR_EXES = $(ROOT)/build/exes
-DIR_LIBS = $(ROOT)/build/libs
-DIRS = $(DIR_OBJS) $(DIR_DEPS) $(DIR_EXES) $(DIR_LIBS)
+DIR_EXES = $(ROOT)/build/exes/$(MAKECMDGOALS)
+DIR_LIBS = $(ROOT)/build/libs/$(MAKECMDGOALS)
+DIRS = $(DIR_OBJS) $(DIR_EXES) $(DIR_LIBS)
 
-RMS=$(DIR_OBJS) $(DIR_DEPS)
+RMS= robjs dobjs
 
 ifneq ("$(EXE)", "")
 EXE := $(addprefix $(DIR_EXES)/, $(EXE))
@@ -32,7 +45,7 @@ OBJS = $(SRCS:.cc=.o)
 OBJS := $(addprefix $(DIR_OBJS)/, $(OBJS))
 
 DEPS = $(SRCS:.cc=.dep)
-DEPS := $(addprefix $(DIR_DEPS)/, $(DEPS))
+DEPS := $(addprefix $(DIR_OBJS)/, $(DEPS))
 
 ifeq ("$(wildcard $(DIR_OBJS))", "")
 DEP_DIR_OBJS := $(DIR_OBJS)
@@ -47,13 +60,12 @@ ifeq ("$(wildcard $(DIR_LIBS))", "")
 DEP_DIR_LIBS := $(DIR_LIBS)
 endif
 
-all: $(EXE) $(LIB)
+.PHONY: release debug clean
+release debug: $(EXE) $(LIB)
 
 ifneq ($(MAKECMDGOALS), clean)
 include $(DEPS)
 endif
-
-CFLAGS += -g
 
 ifneq ("$(INCLUDE_DIRS)", "")
 INCLUDE_DIRS := $(strip $(INCLUDE_DIRS))
@@ -82,12 +94,12 @@ $(LIB): $(DEP_DIR_LIBS) $(OBJS)
 $(DIR_OBJS)/%.o: $(DEP_DIR_OBJS) %.cc
 	$(CPP) $(CFLAGS) -o $@ -c $(filter %.cc, $^) 
 
-$(DIR_DEPS)/%.dep: $(DEP_DIR_DEPS) %.cc
+$(DIR_OBJS)/%.dep: $(DEP_DIR_OBJS) %.cc
 	@echo "Creating $@ ..."
 	@set -e ; \
 		$(RM) $(RMFLAGS) $@.tmp; \
 		$(CPP) $(INCLUDE_DIRS) -E -MM $(filter %.cc, $^) > $@.tmp; \
-		sed 's,\(.*\)\.o[ :]*,objs/\1.o $@: ,g' < $@.tmp > $@; \
+		sed 's,\(.*\)\.o[ :]*,$(DIR_OBJS)/\1.o $@: ,g' < $@.tmp > $@; \
 		$(RM) $(RMFLAGS) $@.tmp
 
 clean:

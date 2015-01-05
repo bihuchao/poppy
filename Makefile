@@ -1,4 +1,4 @@
-.PHONY: all clean
+.PHONY: release debug clean
 
 ROOT = $(realpath .)
 DIRS = $(ROOT)/code/3dmath/src \
@@ -13,14 +13,16 @@ DIRS += $(ROOT)/test/tanks/src
 
 RM = rm
 RMFLAGS = -rf
-RMS = $(ROOT)/build/exes/*.exe $(ROOT)/build/libs/*.a \
-			$(ROOT)/build/exes/*.txt
+RMS = $(ROOT)/build/exes/release/*.exe $(ROOT)/build/libs/release/*.a \
+			$(ROOT)/build/exes/release/*.txt $(ROOT)/build/exes/debug/*.exe \
+			$(ROOT)/build/libs/debug/*.a $(ROOT)/build/exes/debug/*.txt
 
-all clean:
+
+release debug clean:
 	@set -e; \
 		for dir in $(DIRS); \
 		do \
-			cd $$dir && $(MAKE) ROOT=$(ROOT) $@; \
+			cd $$dir && $(MAKE) -r ROOT=$(ROOT) $@; \
 		done
 		@set -e; \
 			if [ "$(MAKECMDGOALS)" = "clean" ]; then $(RM) $(RMFLAGS) $(RMS); fi
