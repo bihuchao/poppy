@@ -55,6 +55,21 @@ class Object
   int transformToWorld(const Vector3& pos, const EulerAngles* angles,
                        PolygonFull::TransMode mode);
   void removeBackFaces(const Camera& camera);
+  int cull(const Camera& camera, uint32_t cullFlag);
+
+  enum CullObjectFlag
+  {
+    kCullObjectZPlane = 1,
+    kCullObjectXPlane = 2,
+    kCullObjectYPlane = 4
+  };
+
+  enum ObjectState
+  {
+    kObjectStateActive  = 1,
+    kObjectStateVisible = 2,
+    kObjectStateCulled  = 4,
+  };
  private:
   uint32_t attr_;
   uint32_t state_;
@@ -73,6 +88,7 @@ class Object
   std::vector<Polygon> polyList_;
 
   void moveNotByMatrix(const Vector3& pos, PolygonFull::TransMode mode);
+  void computeMaxRadius();
 };
 
 }

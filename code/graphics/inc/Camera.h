@@ -33,6 +33,11 @@ class Camera
 
   void buildCameraMatrixByEuler();
   Vector3 getPos() const { return pos_; }
+  float getFarClipZ() const { return farClipZ_; }
+  float getNearClipZ() const { return nearClipZ_; }
+  float getViewDist() const { return viewDist_; }
+  float viewPlaneWidth() const { return viewPlaneWidth_; }
+  float viewPlaneHeight() const { return viewPlaneHeight_; }
 
   enum UvnMode
   {

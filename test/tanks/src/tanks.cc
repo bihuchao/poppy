@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
 
     Camera camera(0, Vector3(cx, cy, 0.0f),
                   EulerAngles(degToRad(0.0f), degToRad(45.0f), degToRad(0.0f)),
-                  Vector3(0.0f, 0.0f, 1600.0f), 90.0f, 0.0f, 0.0f, width, height);
+                  Vector3(0.0f, 0.0f, 1600.0f), 90.0f, 5.0f, 5000.0f, width, height);
     //camera.buildCameraMatrixByEuler();
     camera.buildCameraMatrixByUNV(Camera::kUvnModeSimple);
 
@@ -49,6 +49,8 @@ int main(int argc, char *argv[])
       Object tmp0 = tank;
       Vector3 pos0(0.0f, 0.0f, 200 * (i + 1));
       tmp0.transformToWorld(pos0, NULL, PolygonFull::kLocalToTrans);
+      tmp0.cull(camera, Object::kCullObjectXPlane | Object::kCullObjectYPlane
+                | Object::kCullObjectZPlane);
       tmp0.insertToRenderList(&mainRenderList);
 
       for (int j = 0; j < 16; j++)
@@ -56,11 +58,15 @@ int main(int argc, char *argv[])
         Object tmp1 = tank;
         Vector3 pos1(150 * (j + 1), 0.0f, 200 * (i + 1));
         tmp1.transformToWorld(pos1, NULL, PolygonFull::kLocalToTrans);
+        tmp1.cull(camera, Object::kCullObjectXPlane | Object::kCullObjectYPlane
+                  | Object::kCullObjectZPlane);
         tmp1.insertToRenderList(&mainRenderList);
 
         Object tmp2 = tank;
         Vector3 pos2(150 * (-j - 1), 0.0f, 200 * (i + 1));
         tmp2.transformToWorld(pos2, NULL, PolygonFull::kLocalToTrans);
+        tmp2.cull(camera, Object::kCullObjectXPlane | Object::kCullObjectYPlane
+                  | Object::kCullObjectZPlane);
         tmp2.insertToRenderList(&mainRenderList);
       }
     }

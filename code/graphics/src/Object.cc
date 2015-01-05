@@ -9,6 +9,7 @@
 #include <cctype>
 #include <cstdio>
 #include <stdint.h>
+#include <math.h>
 
 #include "Object.h"
 #include "Logger.h"
@@ -228,6 +229,11 @@ Object::Object(const char* plgfile, uint32_t attr)
   {
     LOG_ERROR("Input poly of object error!\n");
   }
+
+  state_ |= kObjectStateActive;
+  state_ |= kObjectStateVisible;
+
+  computeMaxRadius();
 }
 
 Object::Object(const Object& rhs)
@@ -248,6 +254,12 @@ Object::Object(const Object& rhs)
 
 int Object::insertToRenderList(RenderList *renderList)
 {
+  if (!(state_ & kObjectStateActive)
+      || !(state_ & kObjectStateVisible)
+      || (state_ & kObjectStateCulled))
+  {
+    return 0;
+  }
   for (std::vector<Polygon>::iterator iter = polyList_.begin();
       iter != polyList_.end(); ++iter)
   {
@@ -388,6 +400,67 @@ void Object::removeBackFaces(const Camera& camera)
       iter->state_ |= PolygonFull::kPolyStateBackface;
     }
   }
+}
+
+int Object::cull(const Camera& camera, uint32_t cullFlag)
+{
+  Vector3 tmpPos = camera.transformWorldToCamera(pos_);
+
+  if (cullFlag & kCullObjectZPlane)
+  {
+    if (tmpPos.z - maxRadius_ > camera.getFarClipZ()
+        || tmpPos.z + maxRadius_ < camera.getNearClipZ())
+    {
+      state_ |= kObjectStateCulled;
+      LOG_ERROR("Object %s is culled by Z!!\n", name_.c_str());
+      return 1;
+    }
+  }
+
+  if (cullFlag & kCullObjectXPlane)
+  {
+    float testZ = 0.5 * camera.viewPlaneWidth() * tmpPos.z / camera.getViewDist();
+    if (pos_.x + maxRadius_ < -testZ
+        || pos_.x - maxRadius_ > testZ)
+    {
+      state_ |= kObjectStateCulled;
+      LOG_ERROR("Object %s is culled by X!!\n", name_.c_str());
+      return 1;
+    }
+  }
+
+  if (cullFlag & kCullObjectYPlane)
+  {
+    float testZ = 0.5 * camera.viewPlaneHeight() * tmpPos.z / camera.getViewDist();
+    if (pos_.y + maxRadius_ < -testZ
+        || pos_.y - maxRadius_ > testZ)
+    {
+      state_ |= kObjectStateCulled;
+      LOG_ERROR("Object %s is culled by Y!!\n", name_.c_str());
+      return 1;
+    }
+  }
+
+  return 0;
+}
+
+void Object::computeMaxRadius()
+{
+  float maxRadius = 0.0f;
+  float curRadius = 0.0f;
+
+  for (std::vector<Vector3>::iterator iter = vlistLocal_.begin();
+       iter != vlistLocal_.end(); ++iter)
+  {
+    curRadius = iter->x * iter->x + iter->y * iter->y
+        + iter->z * iter->z;
+    if (curRadius > maxRadius)
+    {
+      maxRadius = curRadius;
+    }
+  }
+
+  maxRadius_ = sqrt(curRadius);
 }
 
 }
