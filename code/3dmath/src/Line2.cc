@@ -4,6 +4,7 @@
 // Author: dingcongjun (dingcj)
 
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "Line2.h"
 #include "Logger.h"
@@ -89,9 +90,11 @@ int Line2::getX(int y, int *px)
 
 int Line2::clip(int w, int h, int *x1, int *y1, int *x2, int *y2)
 {
-  Line2 line(*x1, *y1, *x2, *y2);
   uint32_t pointPos1 = getPosition(w, h, *x1, *y1);
   uint32_t pointPos2 = getPosition(w, h, *x2, *y2);
+
+  int tx1 = *x1, ty1 = *y1;
+  int tx2 = *x2, ty2 = *y2;
 
   if (pointPos1 & pointPos2)
   {
@@ -103,135 +106,64 @@ int Line2::clip(int w, int h, int *x1, int *y1, int *x2, int *y2)
     return 1;
   }
 
-  if (line.vLine())
+  while ((pointPos1 != kClipCodeC) || (pointPos2 != kClipCodeC))
   {
-    if (pointPos1 & kClipCodeN)
-    {
-      *y1 = 0;
-    }
-    else if (pointPos1 & kClipCodeS)
-    {
-      *y1 = h - 1;
-    }
+    uint32_t pos = 0u;
+    Line2 line(tx1, ty1, tx2, ty2);
+    int x = 0, y = 0;
 
-    if (pointPos2 & kClipCodeN)
+    if (pointPos1 != 0)
     {
-      *y2 = 0;
-    }
-    else if (pointPos2 & kClipCodeS)
-    {
-      *y2 = h - 1;
-    }
-
-    return 1;
-  }
-
-  if (line.hLine())
-  {
-    if (pointPos1 & kClipCodeE)
-    {
-      *x1 = w - 1;
-    }
-    else if (pointPos1 & kClipCodeW)
-    {
-      *x1 = 0;
-    }
-
-    if (pointPos2 & kClipCodeE)
-    {
-      *x2 = w - 1;
-    }
-    else if (pointPos2 & kClipCodeW)
-    {
-      *x2 = 0;
-    }
-
-    return 1;
-  }
-
-  //求和X轴的交点
-  int crossNum = 0;
-  int cx[2] = {0};
-  int cy[2] = {0};
-
-  cy[crossNum] = 0;
-  line.getX(cy[crossNum], &cx[crossNum]);
-  if (cx[crossNum] >= 0 && cx[crossNum] < w)
-  {
-    crossNum++;
-  }
-
-  //和Y轴的交点
-  cx[crossNum] = 0;
-  line.getY(cx[crossNum], &cy[crossNum]);
-  if (cy[crossNum] >= 0 && cy[crossNum] < h - 1)
-  {
-    if (crossNum == 1 && (cx[0] != cx[1] || cy[0] != cy[1]))
-    {
-      crossNum++;
-    }
-  }
-
-  //和X轴平行边的交点
-  if (crossNum < 2)
-  {
-    cy[crossNum] = h -1;
-    line.getX(cy[crossNum], &cx[crossNum]);
-    if (cx[crossNum] >= 0 && cx[crossNum] < w)
-    {
-      if (crossNum == 1 && (cx[0] != cx[1] || cy[0] != cy[1]))
-      {
-        crossNum++;
-      }
-    }
-  }
-
-  //和y轴平行边的交点
-  if (crossNum < 2)
-  {
-    cx[crossNum] = w -1;
-    line.getY(cx[crossNum], &cy[crossNum]);
-    if (cy[crossNum] >= 0 && cy[crossNum] < h)
-    {
-      if (crossNum == 1 && (cx[0] != cx[1] || cy[0] != cy[1]))
-      {
-        crossNum++;
-      }
-    }
-  }
-
-  if (crossNum < 2)
-  {
-    return 0;
-  }
-
-  if (pointPos1 != kClipCodeC)
-  {
-    if (abs(*x1 - cx[0]) < abs(*x1 - cx[1]))
-    {
-      *x1 = cx[0];
-      *y1 = cy[0];
+      pos = pointPos1;
     }
     else
     {
-      *x1 = cx[1];
-      *y1 = cy[1];
+      pos = pointPos2;
     }
-  }
 
-  if (pointPos2 != kClipCodeC)
-  {
-    if (abs(*x2 - cx[0]) < abs(*x2 - cx[1]))
+    if (pos & kClipCodeN)
     {
-      *x2 = cx[0];
-      *y2 = cy[0];
+      y = 0;
+      line.getX(y, &x);
+    }
+    else if (pos & kClipCodeS)
+    {
+      y = h - 1;
+      line.getX(y, &x);
+    }
+    else if (pos & kClipCodeW)
+    {
+      x = 0;
+      line.getY(x, &y);
+    }
+    else if (pos & kClipCodeE)
+    {
+      x = w - 1;
+      line.getY(x, &y);
+    }
+
+    if (pos == pointPos1)
+    {
+      tx1 = x;
+      ty1 = y;
+      pointPos1 = getPosition(w, h, tx1, ty1);
     }
     else
     {
-      *x2 = cx[1];
-      *y2 = cy[1];
+      tx2 = x;
+      ty2 = y;
+      pointPos2 = getPosition(w, h, tx2, ty2);
+    }
+
+    if (pointPos1 & pointPos2)
+    {
+      return 0;
     }
   }
+
+  *x1 = tx1, *y1 = ty1;
+  *x2 = tx2, *y2 = ty2;
+
   return 1;
 }
 

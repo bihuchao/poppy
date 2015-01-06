@@ -9,7 +9,8 @@ DIRS = $(ROOT)/code/3dmath/src \
 			 $(ROOT)/code/logserver/src
 
 DIRS += $(ROOT)/test/solid/src
-DIRS += $(ROOT)/test/tanks/src
+DIRS += $(ROOT)/test/tanks/src \
+		$(ROOT)/test/clipLine/src
 
 RM = rm
 RMFLAGS = -rf

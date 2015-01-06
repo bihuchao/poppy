@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
       deg = 0.0f;
     }
 
-    //SDL_Delay(10);
+    SDL_Delay(10);
 
     if (SDL_WaitEvent(&event))
     {

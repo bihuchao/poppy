@@ -399,6 +399,12 @@ void Object::removeBackFaces(const Camera& camera)
     {
       iter->state_ |= PolygonFull::kPolyStateBackface;
     }
+
+    float nearClipZ = camera.getNearClipZ();
+    if (p0.z <= nearClipZ || p1.z <= nearClipZ || p2.z <= nearClipZ)
+    {
+      iter->state_ |= PolygonFull::kPolyStateBackface;
+    }
   }
 }
 
@@ -412,7 +418,7 @@ int Object::cull(const Camera& camera, uint32_t cullFlag)
         || tmpPos.z + maxRadius_ < camera.getNearClipZ())
     {
       state_ |= kObjectStateCulled;
-      LOG_ERROR("Object %s is culled by Z!!\n", name_.c_str());
+      LOG_INFO("Object %s is culled by Z!!\n", name_.c_str());
       return 1;
     }
   }
@@ -424,7 +430,7 @@ int Object::cull(const Camera& camera, uint32_t cullFlag)
         || pos_.x - maxRadius_ > testZ)
     {
       state_ |= kObjectStateCulled;
-      LOG_ERROR("Object %s is culled by X!!\n", name_.c_str());
+      LOG_INFO("Object %s is culled by X!!\n", name_.c_str());
       return 1;
     }
   }
@@ -436,7 +442,7 @@ int Object::cull(const Camera& camera, uint32_t cullFlag)
         || pos_.y - maxRadius_ > testZ)
     {
       state_ |= kObjectStateCulled;
-      LOG_ERROR("Object %s is culled by Y!!\n", name_.c_str());
+      LOG_INFO("Object %s is culled by Y!!\n", name_.c_str());
       return 1;
     }
   }
