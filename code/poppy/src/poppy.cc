@@ -40,8 +40,8 @@ int main(int argc, char *argv[])
   Camera camera(0, Vector3(0.0f, 0.0f, 0.0f),
                 EulerAngles(degToRad(0.0f), degToRad(0.0f), degToRad(0.0f)),
                 Vector3(0.0f, 0.0f, 50.0f), 90.0f, 0.0f, 0.0f, width, height);
-  //camera.buildCameraMatrixByEuler();
-  camera.buildCameraMatrixByUNV(Camera::kUvnModeSimple);
+  camera.buildCameraMatrixByEuler();
+  //camera.buildCameraMatrixByUNV(Camera::kUvnModeSimple);
 
   VideoSystemSDL videoSys;
   videoSys.createWindow(width, height, 32);
@@ -60,11 +60,15 @@ int main(int argc, char *argv[])
     Object tmp = cube;
     tmp.transformToWorld(Vector3(0.0f, 0.0f, 20.0f), &revolve, PolygonFull::kLocalToTrans);
     tmp.removeBackFaces(camera);
+
+    Matrix<4, 4> trans = camera.getMatrixWorldToCamera() *
+        camera.getMatrixCameraToPer() * camera.getMatrixPerToScreen();
+    tmp.transformByMatrix(trans, PolygonFull::kTransOnly);
     tmp.insertToRenderList(&mainRenderList);
 
-    mainRenderList.worldToCamera(camera);
-    mainRenderList.cameraToPerspective(camera);
-    mainRenderList.perspectiveToScreen(camera);
+    //mainRenderList.worldToCamera(camera);
+    //mainRenderList.cameraToPerspective(camera);
+    //mainRenderList.perspectiveToScreen(camera);
 
     videoSys.lockSecondary();
 

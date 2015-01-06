@@ -352,7 +352,7 @@ void Object::moveNotByMatrix(const Vector3& pos, PolygonFull::TransMode mode)
   Vector3 move = pos - pos_;
   if (mode == PolygonFull::kLocalToTrans)
   {
-    for (int i = 0; i < vlistLocal_.size(); i++)
+    for (size_t i = 0; i < vlistLocal_.size(); i++)
     {
       vlistTrans_[i].x = vlistLocal_[i].x + move.x;
       vlistTrans_[i].y = vlistLocal_[i].y + move.y;

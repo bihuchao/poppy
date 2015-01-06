@@ -48,7 +48,7 @@ Vector3 Camera::transformPerToScreen(const Vector3& pos) const
   float beta = 0.5 * viewPortHeight_ - 0.5;
 
   ret.x = alpha + alpha * pos.x;
-  ret.y = beta - beta * pos.y;
+  ret.y = beta - alpha * pos.y;
 
   ret.z = pos.z;
 
@@ -149,7 +149,7 @@ void Camera::buildScreenMatrix()
 
   perToScreen_.zero();
   perToScreen_.setItem(1, 1, alpha);
-  perToScreen_.setItem(2, 2, -beta);
+  perToScreen_.setItem(2, 2, -alpha);
   perToScreen_.setItem(3, 1, alpha);
   perToScreen_.setItem(3, 2, beta);
   perToScreen_.setItem(3, 3, 1);
