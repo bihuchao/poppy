@@ -77,6 +77,14 @@ void PolygonFull::cameraToPerspective(const Camera& camera)
     return;
   }
 
+  float nearClipZ = camera.getNearClipZ();
+  if (vlistTrans_[0].z <= nearClipZ || vlistTrans_[1].z <= nearClipZ
+      || vlistTrans_[2].z <= nearClipZ)
+  {
+    state_ |= kPolyStateClipped;
+    return;
+  }
+
   for (int i = 0; i < 3; i++)
   {
     vlistTrans_[i] = camera.transformCameraToPer(vlistTrans_[i]);

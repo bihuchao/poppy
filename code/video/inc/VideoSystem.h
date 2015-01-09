@@ -38,6 +38,8 @@ class VideoSystem
 
   void drawPixel(int x, int y, uint32_t color);
   int drawLine(int x1, int y1, int x2, int y2, uint32_t color);
+  int width() const { return width_; }
+  int height() const { return height_; }
 
   virtual ~VideoSystem() { }
  protected:

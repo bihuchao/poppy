@@ -32,8 +32,9 @@ Vector3 Camera::transformCameraToPer(const Vector3& pos) const
 {
   Vector3 ret;
 
-  ret.x = viewDist_ * pos.x / pos.z;
-  ret.y = viewDist_ * pos.y / pos.z;
+  float oneOverZ = 1 / pos.z;
+  ret.x = viewDist_ * pos.x * oneOverZ;
+  ret.y = viewDist_ * pos.y * oneOverZ;
   ret.z = pos.z;
 
   return ret;

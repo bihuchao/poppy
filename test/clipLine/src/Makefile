@@ -1,6 +1,6 @@
 EXE = clipLine.exe
 LIB =
-LINK_LIBS = 3dmath logger
+LINK_LIBS = 3dmath graphics logger
 
 OS := $(shell uname -s)
 IS_MINGW := $(shell echo $(OS)|grep -i MINGW)
