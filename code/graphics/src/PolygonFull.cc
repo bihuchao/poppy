@@ -7,6 +7,8 @@
 
 #include "PolygonFull.h"
 #include "Logger.h"
+#include "Line.h"
+#include "MathUtil.h"
 
 namespace poppy
 {
@@ -134,7 +136,7 @@ void PolygonFull::drawSolid(VideoSystem& videoSys)
 
   float dxyLeft, dxyRight;
   float xLeft, xRight;
-  if (vecTmp[0].y == vecTmp[1].y)
+  if (floatEqual(vecTmp[0].y, vecTmp[1].y))
   {
     dxyLeft = (vecTmp[2].x - vecTmp[0].x) / (vecTmp[2].y - vecTmp[0].y);
     dxyRight = (vecTmp[2].x - vecTmp[1].x) / (vecTmp[2].y - vecTmp[1].y);
@@ -142,13 +144,13 @@ void PolygonFull::drawSolid(VideoSystem& videoSys)
     xRight = vecTmp[1].x;
     for (float y = vecTmp[0].y; y <= vecTmp[2].y; y++)
     {
-      videoSys.drawLine(xLeft + 0.5, y + 0.5, xRight + 0.5, y + 0.5, color_); 
+      videoSys.drawLine(xLeft, y, xRight, y, color_);
       xLeft += dxyLeft;
       xRight += dxyRight;
     }
     return;
   }
-  else if (vecTmp[1].y == vecTmp[2].y)
+  else if (floatEqual(vecTmp[1].y, vecTmp[2].y))
   {
     dxyLeft = (vecTmp[1].x - vecTmp[0].x) / (vecTmp[1].y - vecTmp[0].y);
     dxyRight = (vecTmp[2].x - vecTmp[0].x) / (vecTmp[2].y - vecTmp[0].y);
@@ -156,19 +158,23 @@ void PolygonFull::drawSolid(VideoSystem& videoSys)
     xRight = vecTmp[0].x;
     for (float y = vecTmp[0].y; y <= vecTmp[2].y; y++)
     {
-      videoSys.drawLine(xLeft + 0.5, y + 0.5, xRight + 0.5, y + 0.5, color_); 
+      videoSys.drawLine(xLeft, y, xRight, y, color_);
       xLeft += dxyLeft;
       xRight += dxyRight;
     }
     return;
   }
 
-  Line2 line(vecTmp[0].x + 0.5, vecTmp[0].y + 0.5,
-             vecTmp[2].x + 0.5, vecTmp[2].y + 0.5);
+  Line line(vecTmp[0].x, vecTmp[0].y,
+             vecTmp[2].x, vecTmp[2].y);
+  if (!line)
+  {
+    return;
+  }
 
   float y3 = vecTmp[1].y;
-  int x3 = 0.0;
-  line.getX(y3, &x3);
+  float x3 = 0.0;
+  x3 = line.getX(y3);
 
   PolygonFull poly1(attr_, color_, vecTmp[1], 
                     vecTmp[2], Vector3(x3, y3, 0));

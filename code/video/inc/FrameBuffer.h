@@ -9,8 +9,6 @@
 #include <stdint.h>
 #include <map>
 
-#include "Line2.h"
-
 namespace poppy
 {
 enum PixelFormat
@@ -68,7 +66,6 @@ class FrameBuffer
 
   int drawVLine(uint8_t *buf, int y1, int y2, int x, uint32_t color);
   int drawHLine(uint8_t *buf, int x1, int x2, int y, uint32_t color);
-  int drawDiagonal(uint8_t *buf, int x1, int y1, int x2, int y2, uint32_t color);
 };
 
 }

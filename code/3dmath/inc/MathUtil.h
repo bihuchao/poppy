@@ -33,6 +33,12 @@ inline float WrapPi(float theta)
   return theta;
 }
 
+inline bool floatEqual(float v1, float v2)
+{
+  static const float kEpsilon = 0.00001;
+  return fabs(v1 - v2) <= kEpsilon;
+}
+
 }
 
 #endif

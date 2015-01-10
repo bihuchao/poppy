@@ -9,6 +9,7 @@
 #include <math.h>
 
 #include "Logger.h"
+#include "MathUtil.h"
 
 namespace poppy
 {
@@ -18,9 +19,9 @@ Line::Line(float x1, float y1, float x2, float y2)
     hLine_(false), x1_(0.0f), y1_(0.0f), x2_(0.0f),
     y2_(0.0f)
 {
-  if (fabs(x1 - x2) <= kEpsilon)
+  if (floatEqual(x1, x2))
   {
-    if (fabs(y1 - y2) <= kEpsilon)
+    if (floatEqual(y1, y2))
     {
       valid_ = false;
       LOG_ERROR("point1 is equal to p2, %f %f %f %f\n",
@@ -33,7 +34,7 @@ Line::Line(float x1, float y1, float x2, float y2)
     x2_ = x2, y2_ = y2;
     return;
   }
-  else if (fabs(y1 - y2) <= kEpsilon)
+  else if (floatEqual(y1, y2))
   {
     hLine_ = true;
 
@@ -59,6 +60,8 @@ int Line::clip(int w, int h, int *x1, int *y1,
   float cx2 = x2_;
   float cy2 = y2_;
   float x, y;
+  *x1 = cx1 + 0.5, *y1 = cy1 + 0.5;
+  *x2 = cx2 + 0.5, *y2 = cy2 + 0.5;
 
   if (!valid_)
   {
@@ -116,19 +119,6 @@ int Line::clip(int w, int h, int *x1, int *y1,
   *x2 = cx2 + 0.5, *y2 = cy2 + 0.5;
 
   return 1;
-}
-
-int Line::draw(VideoSystem& videoSys)
-{
-  int width = videoSys.width();
-  int height = videoSys.height();
-  int x1 = 0, y1 = 0, x2 = 0, y2 = 0;
-
-  int ret = clip(width, height, &x1, &y1, &x2, &y2);
-  if (ret == 0)
-  {
-    LOG_INFO("Line is not in window!!!\n");
-  }
 }
 
 }

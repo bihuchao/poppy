@@ -24,6 +24,8 @@ int main(int argc, char *argv[])
   float t2 = 2 * cos(degToRad(30.0)) - t1;
   float t3 = t1 * cos(degToRad(30.0));
 
+  //disableDebugInfo();
+
   Vector3 point1(0, t1, 0.0f);
   Vector3 point2(-t3, -t2, 0.0f);
   Vector3 point3(t3, -t2, 0.0f);
@@ -36,7 +38,7 @@ int main(int argc, char *argv[])
 
   Camera camera(0, Vector3(0.0f, 0.0f, 0.0f),
                 EulerAngles(degToRad(0.0f), degToRad(0.0f), degToRad(0.0f)),
-                Vector3(0.0f, 0.0f, 50.0f), 90.0f, 0.0f, 0.0f, width, height);
+                Vector3(0.0f, 0.0f, 50.0f), 90.0f, 1.1f, 0.0f, width, height);
   //camera.buildCameraMatrixByEuler();
   camera.buildCameraMatrixByUNV(Camera::kUvnModeSimple);
 
@@ -52,7 +54,7 @@ int main(int argc, char *argv[])
     //mainRenderList.insert(polygon);
     EulerAngles revolve(degToRad(deg), 0.0f, 0.0f);
     Matrix<4, 4> matrix = revolve.getObjectToWorldMatrix();
-    matrix.setItem(4, 3, 5.0f);
+    matrix.setItem(4, 3, 2.0f);
     PolygonFull tmp(polygon);
     tmp.transformByMatrix(matrix, PolygonFull::kLocalToTrans);
     mainRenderList.reset(); 
@@ -70,13 +72,13 @@ int main(int argc, char *argv[])
 
     videoSys.flipDisplay();
 
-    deg += 1.0f;
+    deg += 0.1f;
     if (deg >= 360.0f)
     {
       deg = 0.0f;
     }
 
-    SDL_Delay(10);
+    //SDL_Delay(10);
 
     if (SDL_PollEvent(&event))
     {

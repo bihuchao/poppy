@@ -37,7 +37,7 @@ class VideoSystem
   virtual int flipDisplay();
 
   void drawPixel(int x, int y, uint32_t color);
-  int drawLine(int x1, int y1, int x2, int y2, uint32_t color);
+  int drawLine(float x1, float y1, float x2, float y2, uint32_t color);
   int width() const { return width_; }
   int height() const { return height_; }
 

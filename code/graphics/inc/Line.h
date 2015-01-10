@@ -44,7 +44,6 @@ class Line
 
   int clip(int w, int h, int *x1, int *y1,
            int *x2, int *y2);
-  int draw(VideoSystem& videoSys);
 
  private:
   float k_, b_;

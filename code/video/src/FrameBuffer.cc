@@ -7,6 +7,7 @@
 
 #include "FrameBuffer.h"
 #include "Logger.h"
+#include "Line.h"
 
 namespace poppy
 {
@@ -74,45 +75,65 @@ void FrameBuffer::putPixelCommon(uint8_t *buffer, int x, int y,
 
 int FrameBuffer::drawLine(uint8_t *buf, int x1, int y1, int x2, int y2, uint32_t color)
 {
-
-  Line2 line(x1, y1, x2, y2);
-
-
-  int cx1 = x1;
-
-  int cy1 = y1;
-  int cx2 = x2;
-  int cy2 = y2;
-
-  int ret = line.clip(width_, height_, &cx1, &cy1, &cx2, &cy2);
-  if (ret == 0)
+  //vline
+  if (x1 == x2)
   {
-    LOG_ERROR("line is not in window!\n");
-    return -1;
-  }
-
-  Line2 drawLine(cx1, cy1, cx2, cy2);
-  if (drawLine.vLine())
-  {
-    drawVLine(buf, cy1, cy2, cx1, color);
-    return 0;
-  }
-  else if (drawLine.hLine())
-  {
-    drawHLine(buf, cx1, cx2, cy1, color);
+    drawVLine(buf, y1, y2, x1, color);
     return 0;
   }
 
-  drawDiagonal(buf, cx1, cy1, cx2, cy2, color);
+  //hline
+  if (y1 == y2)
+  {
+    drawHLine(buf, x1, x2, y1, color);
+    return 0;
+  }
+
+  bool exchangeXY = false;
+  if (abs(y2 - y1) > abs(x2 - x1))
+  {
+    exchangeXY = true;
+    std::swap(x1, y1);
+    std::swap(x2, y2);
+  }
+
+  float k = abs(y2 - y1) / (float)abs(x2 - x1);
+  float e = k - 0.5;
+  int iy = (y2 - y1) > 0 ? 1 : -1;
+  int ix = (x2 - x1) > 0 ? 1 : -1;
+  for (int x = x1, y = y1; x != (x2 + 1); x += ix)
+  {
+    if (exchangeXY)
+    {
+      putPixel(buf, y, x, color);
+    }
+    else
+    {
+      putPixel(buf, x, y, color);
+    }
+
+    if (e > 0)
+    {
+      y += iy;
+      e += k - 1;
+    }
+    else
+    {
+      e += k;
+    }
+  }
+
   return 0;
 }
 
 int FrameBuffer::drawVLine(uint8_t *buf, int y1, int y2, int x, uint32_t color)
 {
-  int start = std::min(y1, y2);
-  int end = std::max(y1, y2);
+  if (y1 > y2)
+  {
+    std::swap(y1, y2);
+  }
 
-  for (int y = start; y <= end; y++)
+  for (int y = y1; y <= y2; y++)
   {
     putPixel(buf, x, y, color);
   }
@@ -122,40 +143,16 @@ int FrameBuffer::drawVLine(uint8_t *buf, int y1, int y2, int x, uint32_t color)
 
 int FrameBuffer::drawHLine(uint8_t *buf, int x1, int x2, int y, uint32_t color)
 {
-  int start = std::min(x1, x2);
-  int end = std::max(x1, x2);
+  if (x1 > x2)
+  {
+    std::swap(x1, x2);
+  }
 
-  for (int x = start; x <= end; x++)
+  for (int x = x1; x <= x2; x++)
   {
     putPixel(buf, x, y, color);
   }
 
-  return 0;
-}
-
-int FrameBuffer::drawDiagonal(uint8_t *buf, int x1, int y1, int x2,
-                              int y2, uint32_t color)
-{
-  int start = std::min(x1, x2);
-  int end = std::max(x1, x2);
-  Line2 line(x1, y1, x2, y2);
-
-  for (int x = start; x <= end; x++)
-  {
-    int y;
-    line.getY(x, &y);
-
-    putPixel(buf, x, y, color);
-  }
-
-  start = std::min(y1, y2);
-  end = std::max(y1, y2);
-  for (int y = start; y <= end; y++)
-  {
-    int x;
-    line.getX(y, &x);
-    putPixel(buf, x, y, color);
-  }
   return 0;
 }
 
