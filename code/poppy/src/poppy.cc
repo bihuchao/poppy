@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
 
     videoSys.lockSecondary();
 
-    mainRenderList.draw(videoSys);
+    mainRenderList.drawSolid(videoSys);
 
     videoSys.unlockSecondary();
 

@@ -7,6 +7,7 @@
 #define POPPY_MATH_MATHUTIL_H
 
 #include <math.h>
+#include <stdlib.h>
 
 namespace poppy
 {
@@ -37,6 +38,11 @@ inline bool floatEqual(float v1, float v2)
 {
   static const float kEpsilon = 0.00001;
   return fabs(v1 - v2) <= kEpsilon;
+}
+
+inline int randRange(int start, int end)
+{
+  return start + rand() % (end - start + 1);
 }
 
 }

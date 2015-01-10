@@ -469,4 +469,52 @@ void Object::computeMaxRadius()
   maxRadius_ = sqrt(curRadius);
 }
 
+int Object::scale(Vector3 vscale, PolygonFull::TransMode mode)
+{
+  int ret = 0;
+  switch (mode)
+  {
+    case PolygonFull::kLocalOnly:
+      for (std::vector<Vector3>::iterator iter = vlistLocal_.begin();
+          iter != vlistLocal_.end(); ++iter)
+      {
+        iter->x *= vscale.x;
+        iter->y *= vscale.y;
+        iter->z *= vscale.z;
+      }
+      break;
+    case PolygonFull::kTransOnly:
+      for (std::vector<Vector3>::iterator iter = vlistTrans_.begin();
+          iter != vlistTrans_.end(); ++iter)
+      {
+        iter->x *= vscale.x;
+        iter->y *= vscale.y;
+        iter->z *= vscale.z;
+      }
+      break;
+    case PolygonFull::kLocalToTrans:
+      if (vlistTrans_.size() != vlistLocal_.size())
+      {
+        LOG_ERROR("sizeo of trans is not equal to local: %d %d\n",
+                  vlistTrans_.size(), vlistLocal_.size());
+        ret = -1;
+        break;
+      }
+
+      for (size_t i = 0; i < vlistTrans_.size(); i++)
+      {
+        vlistTrans_[i].x = vlistLocal_[i].x * vscale.x;
+        vlistTrans_[i].y = vlistLocal_[i].y * vscale.y;
+        vlistTrans_[i].z = vlistLocal_[i].z * vscale.z;
+      }
+      break;
+    default:
+      ret = -1;
+      LOG_ERROR("trans mode error: %d\n", mode);
+      break;
+  }
+
+  return ret;
+}
+
 }

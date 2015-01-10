@@ -56,6 +56,8 @@ class Object
                        PolygonFull::TransMode mode);
   void removeBackFaces(const Camera& camera);
   int cull(const Camera& camera, uint32_t cullFlag);
+  int scale(Vector3 vscale, PolygonFull::TransMode mode);
+  float getMaxRadius() { return maxRadius_; }
 
   enum CullObjectFlag
   {

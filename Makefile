@@ -11,7 +11,8 @@ DIRS = $(ROOT)/code/3dmath/src \
 DIRS += $(ROOT)/test/solid/src
 DIRS += $(ROOT)/test/tanks/src \
 		$(ROOT)/test/clipLine/src \
-		$(ROOT)/test/bresenham/src
+		$(ROOT)/test/bresenham/src \
+		$(ROOT)/test/roam/src
 
 RM = rm
 RMFLAGS = -rf

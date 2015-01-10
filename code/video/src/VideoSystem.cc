@@ -161,5 +161,25 @@ int VideoSystem::drawLine(float x1, float y1, float x2, float y2, uint32_t color
   return secondary_->drawLine(lockedSecondaryBuf_, ix1, iy1, ix2, iy2, color);
 }
 
+int VideoSystem::drawRectangle(float x, float y, float w, float h, uint32_t color)
+{
+  drawLine(x, y, x + w - 1, y, color);
+  drawLine(x, y + h - 1, x + w - 1, y + h - 1, color);
+  drawLine(x, y, x, y + h - 1, color);
+  drawLine(x + w - 1, y, x + w - 1, y + h - 1, color);
+
+  return 0;
+}
+int VideoSystem::drawRectangleSolid(float x, float y, float w,
+                                    float h, uint32_t color)
+{
+  for (float ty = y; ty < y + h; ++ty)
+  {
+    drawLine(x, ty, x + w - 1, ty, color);
+  }
+
+  return 0;
+}
+
 }
 

@@ -38,6 +38,8 @@ class VideoSystem
 
   void drawPixel(int x, int y, uint32_t color);
   int drawLine(float x1, float y1, float x2, float y2, uint32_t color);
+  int drawRectangle(float x, float y, float w, float h, uint32_t color);
+  int drawRectangleSolid(float x, float y, float w, float h, uint32_t color);
   int width() const { return width_; }
   int height() const { return height_; }
 
