@@ -13,7 +13,7 @@
 namespace poppy
 {
 
-class VideoSystem
+class VideoSystem : private noncopyable
 {
  public:
   VideoSystem()

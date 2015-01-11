@@ -158,11 +158,11 @@ int main(int argc, char *argv[])
         }
         if (event.key.keysym.sym == SDLK_LEFT)
         {
-
+          cameraPos.x -= tankSpeed;
         }
         if (event.key.keysym.sym == SDLK_RIGHT)
         {
-
+          cameraPos.x += tankSpeed;
         }
         if (event.key.keysym.sym == SDLK_UP)
         {

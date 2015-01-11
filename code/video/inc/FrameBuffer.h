@@ -9,6 +9,8 @@
 #include <stdint.h>
 #include <map>
 
+#include "noncopyable.h"
+
 namespace poppy
 {
 enum PixelFormat
@@ -17,7 +19,7 @@ enum PixelFormat
   PIXEL_FORMAT_NUM
 };
 
-class FrameBuffer
+class FrameBuffer : private noncopyable
 {
  public:
   FrameBuffer(int32_t width = 0, int32_t height = 0, int32_t pitch = 0,

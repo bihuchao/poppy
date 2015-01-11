@@ -45,6 +45,9 @@ int main(int argc, char *argv[])
   VideoSystemSDL videoSys;
   videoSys.createWindow(width, height, 32);
 
+  //VideoSystemSDL test = videoSys;
+  //test = videoSys;
+
   SDL_Event event;
   float deg = 0.0f;
   while (1)
