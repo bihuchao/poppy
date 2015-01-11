@@ -517,4 +517,56 @@ int Object::scale(Vector3 vscale, PolygonFull::TransMode mode)
   return ret;
 }
 
+void Object::swap(Object& other)
+{
+  std::swap(attr_, other.attr_);
+  std::swap(state_, other.state_);
+  std::swap(avgRadius_, other.avgRadius_);
+  std::swap(maxRadius_, other.maxRadius_);
+  std::swap(ux_, other.ux_);
+  std::swap(vy_, other.vy_);
+  std::swap(nz_, other.nz_);
+  std::swap(pos_, other.pos_);
+  name_.swap(other.name_);
+  std::swap(id_, other.id_);
+  vlistLocal_.swap(other.vlistLocal_);
+  vlistTrans_.swap(other.vlistTrans_);
+  polyList_.swap(other.polyList_);
+
+  for (std::vector<Polygon>::iterator iter = polyList_.begin();
+      iter != polyList_.end(); ++iter)
+  {
+    iter->pvlist_ = &vlistTrans_;
+  }
+
+  for (std::vector<Polygon>::iterator iter = other.polyList_.begin();
+      iter != other.polyList_.end(); ++iter)
+  {
+    iter->pvlist_ = &(other.vlistTrans_);
+  }
+}
+
+Object& Object::operator=(const Object& rhs)
+{
+  Object tmp(rhs);
+  swap(tmp);
+  return *this;
+}
+
+void swap(Object& lhs, Object& rhs)
+{
+  lhs.swap(rhs);
+}
+
+}
+
+namespace std
+{
+
+template<>
+void swap<poppy::Object>(poppy::Object& lhs, poppy::Object& rhs)
+{
+  lhs.swap(rhs);
+}
+
 }

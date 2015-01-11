@@ -12,7 +12,8 @@ DIRS += $(ROOT)/test/solid/src
 DIRS += $(ROOT)/test/tanks/src \
 		$(ROOT)/test/clipLine/src \
 		$(ROOT)/test/bresenham/src \
-		$(ROOT)/test/roam/src
+		$(ROOT)/test/roam/src \
+		$(ROOT)/test/objectcopy/src
 
 RM = rm
 RMFLAGS = -rf

@@ -47,8 +47,9 @@ class Object
  public:
   Object(const char *plgfile, uint32_t attr);
   Object(const Object& rhs);
-
   Object& operator=(const Object& rhs);
+  void swap(Object& other);
+
   int insertToRenderList(RenderList *renderList);
   int transformByMatrix(const Matrix<4, 4>& mt,
                         PolygonFull::TransMode mode);
@@ -92,6 +93,16 @@ class Object
   void moveNotByMatrix(const Vector3& pos, PolygonFull::TransMode mode);
   void computeMaxRadius();
 };
+
+void swap(Object& lhs, Object& rhs);
+
+}
+
+namespace std
+{
+
+template<>
+void swap<poppy::Object>(poppy::Object& lhs, poppy::Object& rhs);
 
 }
 
