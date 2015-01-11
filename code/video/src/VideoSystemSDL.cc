@@ -13,9 +13,16 @@
 namespace poppy
 {
 
-int VideoSystemSDL::createWindow(int width, int height, int bitDepth)
+int VideoSystemSDL::createWindow(int width, int height, int bitDepth, bool fullscreen)
 {
-  SDL_Surface *primary = SDL_SetVideoMode(width, height, bitDepth, SDL_SWSURFACE);
+  uint32_t mode = 0;
+  mode |= SDL_SWSURFACE;
+  if (fullscreen)
+  {
+    mode |= SDL_FULLSCREEN;
+  }
+
+  SDL_Surface *primary = SDL_SetVideoMode(width, height, bitDepth, mode);
   if (primary == NULL)
   {
     LOG_ERROR("SDL_SetVideoMode error\n"); 

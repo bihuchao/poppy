@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
   camera.buildCameraMatrixByUNV(Camera::kUvnModeSimple);
 
   VideoSystemSDL videoSys;
-  videoSys.createWindow(width, height, 32);
+  videoSys.createWindow(width, height, 32, false);
 
   //VideoSystemSDL test = videoSys;
   //test = videoSys;

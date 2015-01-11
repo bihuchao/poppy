@@ -20,7 +20,7 @@ class VideoSystemSDL : public VideoSystem
     SDL_Init(SDL_INIT_EVERYTHING);
   }
 
-  virtual int createWindow(int width, int height, int bitDepth);
+  virtual int createWindow(int width, int height, int bitDepth, bool fullscreen);
 
   ~VideoSystemSDL();
 };

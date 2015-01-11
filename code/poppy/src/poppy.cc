@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
   //camera.buildCameraMatrixByUNV(Camera::kUvnModeSimple);
 
   VideoSystemSDL videoSys;
-  videoSys.createWindow(width, height, 32);
+  videoSys.createWindow(width, height, 32, false);
 
   SDL_Event event;
   float deg = 0.0f;

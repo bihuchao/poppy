@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
   Object cube("./plg/cube1.plg", 0u);
 
   VideoSystemSDL videoSys;
-  videoSys.createWindow(width, height, 32);
+  videoSys.createWindow(width, height, 32, false);
 
   Object tmpCube = cube;
   SDL_Event event;
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     tmpCube = tank;
 
     EulerAngles angles(degToRad(deg), 0.0f, 0.0f);
-    tmpCube.transformToWorld(Vector3(0, 0, 200), &angles, PolygonFull::kLocalToTrans);
+    tmpCube.transformToWorld(Vector3(0, 0, 1500), &angles, PolygonFull::kLocalToTrans);
     tmpCube.insertToRenderList(&mainRenderList);
 
     mainRenderList.worldToCamera(camera);
@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 
     videoSys.lockSecondary();
 
-    mainRenderList.draw(videoSys);
+    mainRenderList.drawSolid(videoSys);
 
     videoSys.unlockSecondary();
 

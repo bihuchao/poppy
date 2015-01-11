@@ -27,7 +27,7 @@ class VideoSystem : private noncopyable
         lockedPrimaryBuf_(NULL),
         lockedSecondaryBuf_(NULL) { }
 
-  virtual int createWindow(int width, int height, int bitDepth) = 0;
+  virtual int createWindow(int width, int height, int bitDepth, bool fullscreen) = 0;
   virtual int lockPrimary();
   virtual int unlockPrimary();
   virtual int lockSecondary();

@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
   int width = 640;
   int height = 640;
   VideoSystemSDL videoSys;
-  videoSys.createWindow(width, height, 32);
+  videoSys.createWindow(width, height, 32, false);
 
   SDL_Event event;
   while (true)

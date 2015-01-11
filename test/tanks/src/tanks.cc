@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
   Object tank("./plg/tank1.plg", 0u);
 
   VideoSystemSDL videoSys;
-  videoSys.createWindow(width, height, 32);
+  videoSys.createWindow(width, height, 32, true);
 
   SDL_Event event;
   float deg = 0.0f;

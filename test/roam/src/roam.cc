@@ -30,10 +30,10 @@ const int kTankSpeed = 15;
 
 int main(int argc, char *argv[])
 {
-  int width = 800;
-  int height = 600;
+  int width = 1920;
+  int height = 1080;
   VideoSystemSDL videoSys;
-  videoSys.createWindow(width, height, 32);
+  videoSys.createWindow(width, height, 32, true);
 
   Vector3 cameraPos(0, 40, 0);
   EulerAngles cameraDir(0, 0, 0);
@@ -97,6 +97,7 @@ int main(int argc, char *argv[])
                            PolygonFull::kLocalToTrans);
       tmp.cull(camera, Object::kCullObjectXPlane | Object::kCullObjectYPlane
                 | Object::kCullObjectZPlane);
+      tmp.removeBackFaces(camera);
       tmp.insertToRenderList(&mainRenderList);
     }
 
@@ -107,6 +108,7 @@ int main(int argc, char *argv[])
                            PolygonFull::kLocalToTrans);
       tmp.cull(camera, Object::kCullObjectXPlane | Object::kCullObjectYPlane
                 | Object::kCullObjectZPlane);
+      tmp.removeBackFaces(camera);
       tmp.insertToRenderList(&mainRenderList);
     }
 
@@ -126,6 +128,7 @@ int main(int argc, char *argv[])
         tmp.transformToWorld(vec, NULL, PolygonFull::kLocalToTrans);
         tmp.cull(camera, Object::kCullObjectXPlane | Object::kCullObjectYPlane
                   | Object::kCullObjectZPlane);
+        tmp.removeBackFaces(camera);
         tmp.insertToRenderList(&mainRenderList);
       }
     }
@@ -136,7 +139,7 @@ int main(int argc, char *argv[])
 
     videoSys.lockSecondary();
 
-    mainRenderList.draw(videoSys);
+    mainRenderList.drawSolid(videoSys);
 
     videoSys.unlockSecondary();
 
@@ -171,6 +174,11 @@ int main(int argc, char *argv[])
         if (event.key.keysym.sym == SDLK_DOWN)
         {
           cameraPos.z -= tankSpeed;
+        }
+
+        if (event.key.keysym.sym == SDLK_ESCAPE)
+        {
+          break;
         }
       }
       camera.setPos(cameraPos);
