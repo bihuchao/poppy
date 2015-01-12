@@ -14,7 +14,7 @@ void RenderList::transformByMatrix(const Matrix<4, 4>& mt,
 {
   int ret = 0;
 
-  for (std::list<PolygonFull>::iterator iter = polyList_.begin();
+  for (std::vector<PolygonFull>::iterator iter = polyList_.begin();
         iter != polyList_.end(); ++iter)
   {
     ret = iter->transformByMatrix(mt, mode);
@@ -27,7 +27,7 @@ void RenderList::transformByMatrix(const Matrix<4, 4>& mt,
 
 void RenderList::worldToCamera(const Camera& camera)
 {
-  for (std::list<PolygonFull>::iterator iter = polyList_.begin();
+  for (std::vector<PolygonFull>::iterator iter = polyList_.begin();
         iter != polyList_.end(); ++iter)
   {
     iter->worldToCamera(camera);
@@ -36,7 +36,7 @@ void RenderList::worldToCamera(const Camera& camera)
 
 void RenderList::cameraToPerspective(const Camera& camera)
 {
-  for (std::list<PolygonFull>::iterator iter = polyList_.begin();
+  for (std::vector<PolygonFull>::iterator iter = polyList_.begin();
         iter != polyList_.end(); ++iter)
   {
     iter->cameraToPerspective(camera);
@@ -45,7 +45,7 @@ void RenderList::cameraToPerspective(const Camera& camera)
 
 void RenderList::perspectiveToScreen(const Camera& camera)
 {
-  for (std::list<PolygonFull>::iterator iter = polyList_.begin();
+  for (std::vector<PolygonFull>::iterator iter = polyList_.begin();
         iter != polyList_.end(); ++iter)
   {
     iter->perspectiveToScreen(camera);
@@ -54,7 +54,7 @@ void RenderList::perspectiveToScreen(const Camera& camera)
 
 void RenderList::draw(VideoSystem& videoSys)
 {
-  for (std::list<PolygonFull>::iterator iter = polyList_.begin();
+  for (std::vector<PolygonFull>::iterator iter = polyList_.begin();
         iter != polyList_.end(); ++iter)
   {
     iter->draw(videoSys);
@@ -63,7 +63,7 @@ void RenderList::draw(VideoSystem& videoSys)
 
 void RenderList::drawSolid(VideoSystem& videoSys)
 {
-  for (std::list<PolygonFull>::iterator iter = polyList_.begin();
+  for (std::vector<PolygonFull>::iterator iter = polyList_.begin();
         iter != polyList_.end(); ++iter)
   {
     iter->drawSolid(videoSys);

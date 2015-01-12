@@ -33,7 +33,7 @@ class RenderList
   uint32_t state_;
   uint32_t attr_;
 
-  std::list<PolygonFull> polyList_;
+  std::vector<PolygonFull> polyList_;
 };
 
 }
