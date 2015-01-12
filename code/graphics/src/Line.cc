@@ -24,7 +24,7 @@ Line::Line(float x1, float y1, float x2, float y2)
     if (floatEqual(y1, y2))
     {
       valid_ = false;
-      LOG_ERROR("point1 is equal to p2, %f %f %f %f\n",
+      LOG_INFO("point1 is equal to p2, %f %f %f %f\n",
                 x1, y1, x2, y2);
       return;
     }

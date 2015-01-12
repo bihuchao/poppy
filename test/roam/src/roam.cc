@@ -30,10 +30,10 @@ const int kTankSpeed = 15;
 
 int main(int argc, char *argv[])
 {
-  int width = 1920;
-  int height = 1080;
+  int width = 800;
+  int height = 600;
   VideoSystemSDL videoSys;
-  videoSys.createWindow(width, height, 32, true);
+  videoSys.createWindow(width, height, 32, false);
 
   Vector3 cameraPos(0, 40, 0);
   EulerAngles cameraDir(0, 0, 0);
@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
     for (int i = 0; i < kNumOfTanks; i++)
     {
       Object tmp = objTank;
-      tmp.transformToWorld(tanksPos[i], &tanksDir[i],
+      tmp.transformToWorld(tanksPos[i], NULL,
                            PolygonFull::kLocalToTrans);
       tmp.cull(camera, Object::kCullObjectXPlane | Object::kCullObjectYPlane
                 | Object::kCullObjectZPlane);
@@ -146,7 +146,7 @@ int main(int argc, char *argv[])
     videoSys.flipDisplay();
 
     SDL_Delay(10);
-    if (SDL_PollEvent(&event))
+    if (SDL_WaitEvent(&event))
     {
       int tankSpeed = kTankSpeed;
       if (event.type == SDL_QUIT)

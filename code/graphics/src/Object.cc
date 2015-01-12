@@ -411,6 +411,7 @@ void Object::removeBackFaces(const Camera& camera)
 int Object::cull(const Camera& camera, uint32_t cullFlag)
 {
   Vector3 tmpPos = camera.transformWorldToCamera(pos_);
+  Vector3 cameraPos = camera.getPos();
 
   if (cullFlag & kCullObjectZPlane)
   {
@@ -426,8 +427,8 @@ int Object::cull(const Camera& camera, uint32_t cullFlag)
   if (cullFlag & kCullObjectXPlane)
   {
     float testZ = 0.5 * camera.viewPlaneWidth() * tmpPos.z / camera.getViewDist();
-    if (pos_.x + maxRadius_ < -testZ
-        || pos_.x - maxRadius_ > testZ)
+    if (tmpPos.x + maxRadius_ < -testZ
+        || tmpPos.x - maxRadius_ > testZ)
     {
       state_ |= kObjectStateCulled;
       LOG_INFO("Object %s is culled by X!!\n", name_.c_str());
@@ -438,8 +439,8 @@ int Object::cull(const Camera& camera, uint32_t cullFlag)
   if (cullFlag & kCullObjectYPlane)
   {
     float testZ = 0.5 * camera.viewPlaneHeight() * tmpPos.z / camera.getViewDist();
-    if (pos_.y + maxRadius_ < -testZ
-        || pos_.y - maxRadius_ > testZ)
+    if (tmpPos.y + maxRadius_ < -testZ
+        || tmpPos.y - maxRadius_ > testZ)
     {
       state_ |= kObjectStateCulled;
       LOG_INFO("Object %s is culled by Y!!\n", name_.c_str());

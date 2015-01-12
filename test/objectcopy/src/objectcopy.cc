@@ -26,31 +26,34 @@ int main(int argc, char *argv[])
   int width = 800;
   int height = 600;
 
-  Object tank("./plg/tank1.plg", 0u);
-  Object cube("./plg/cube1.plg", 0u);
+  //Object tank("./plg/tank1.plg", 0u);
+  Object tower("./plg/tower1.plg", 0u);
+  tower.scale(Vector3(1.0, 2.0, 1.0), PolygonFull::kLocalOnly);
 
   VideoSystemSDL videoSys;
   videoSys.createWindow(width, height, 32, false);
 
-  Object tmpCube = cube;
+  Object tmpTower = tower;
   SDL_Event event;
   float deg = 0.0f;
   while (1)
   {
     videoSys.fillSecondary(0x0);
 
-    Camera camera(0, Vector3(0.0, 0.0, 0.0f),
-                  EulerAngles(degToRad(0.0f), degToRad(45.0f), degToRad(0.0f)),
-                  Vector3(0.0f, 0.0f, 1600.0f), 90.0f, 5.0f, 5000.0f, width, height);
-    //camera.buildCameraMatrixByEuler();
-    camera.buildCameraMatrixByUNV(Camera::kUvnModeSimple);
+    Camera camera(0, Vector3(-570.0, 40.0, 1680.0f),
+                  EulerAngles(degToRad(0.0f), degToRad(0.0f), degToRad(0.0f)),
+                  Vector3(0.0f, 0.0f, 1600.0f), 120.0f, 100.0f, 12000.0f, width, height);
+    camera.buildCameraMatrixByEuler();
+    //camera.buildCameraMatrixByUNV(Camera::kUvnModeSimple);
 
     mainRenderList.reset();
-    tmpCube = tank;
 
+    tmpTower = tower;
     EulerAngles angles(degToRad(deg), 0.0f, 0.0f);
-    tmpCube.transformToWorld(Vector3(0, 0, 1500), &angles, PolygonFull::kLocalToTrans);
-    tmpCube.insertToRenderList(&mainRenderList);
+    tmpTower.transformToWorld(Vector3(-570.0, 0, 1965), &angles, PolygonFull::kLocalToTrans);
+    tmpTower.cull(camera, Object::kCullObjectXPlane | Object::kCullObjectYPlane | Object::kCullObjectZPlane);
+    tmpTower.removeBackFaces(camera);
+    tmpTower.insertToRenderList(&mainRenderList);
 
     mainRenderList.worldToCamera(camera);
     mainRenderList.cameraToPerspective(camera);
@@ -68,7 +71,7 @@ int main(int argc, char *argv[])
     {
       deg = 0.0f;
     }
-    deg += 1.0f;
+    //deg += 1.0f;
     SDL_Delay(10);
 
     if (SDL_PollEvent(&event))
