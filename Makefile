@@ -17,9 +17,9 @@ DIRS += $(ROOT)/test/tanks/src \
 
 RM = rm
 RMFLAGS = -rf
-RMS = $(ROOT)/build/exes/release/*.exe $(ROOT)/build/libs/release/*.a \
-			$(ROOT)/build/exes/release/*.txt $(ROOT)/build/exes/debug/*.exe \
-			$(ROOT)/build/libs/debug/*.a $(ROOT)/build/exes/debug/*.txt
+RMS = $(ROOT)/build/exes/release/*.exe $(ROOT)/build/exes/release/*.txt \
+		$(ROOT)/build/exes/debug/*.exe $(ROOT)/build/exes/debug/*.txt \
+		$(ROOT)/build/libs/
 
 
 release debug clean:

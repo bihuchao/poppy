@@ -2,6 +2,7 @@
 CFLAGS = -Wall
 
 MKDIR = mkdir
+MKDIRFLAGS = -p
 RM = rm
 RMFLAGS = -rf
 
@@ -83,7 +84,7 @@ LINK_LIBS := $(addprefix -l, $(LINK_LIBS))
 endif
 
 $(DIRS):
-	$(MKDIR) $@
+	$(MKDIR) $(MKDIRFLAGS) $@
 
 $(EXE): $(DEP_DIR_EXES) $(OBJS) $(DEP_LIBS)
 	$(CPP) -L$(DIR_LIBS) -o $@ $(filter %.o, $^) $(LINK_LIBS)
