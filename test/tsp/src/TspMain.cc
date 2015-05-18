@@ -53,7 +53,6 @@ int main(int argc, char *argv[])
 
   GeneticTsp tsp(cities, 100, 0.05, 0.5);
   tsp.InitGroup();
-  //tsp.print();
 
   VideoSystemSDL videoSys;
   videoSys.createWindow(width, height, 32, false);
@@ -81,7 +80,6 @@ int main(int argc, char *argv[])
   }
 
   SDL_Quit();
-
-	return 0;
+  return 0;
 }
 

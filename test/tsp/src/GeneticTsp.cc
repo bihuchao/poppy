@@ -39,7 +39,7 @@ void GeneticTsp::InitGroup()
     int randidx = ::rand() % allGenes.size();
     if (std::find(tmp.begin(), tmp.end(), randidx) == tmp.end())
     {
-      group_.push_back(allGenes[randidx]);
+      group_.push_back(GenePtr(new Gene(allGenes[randidx])));
       tmp.push_back(randidx);
       ++i;
     }
@@ -55,25 +55,28 @@ void GeneticTsp::evolution()
     return;
   }
 
-  group_.sort();
+  group_.sort(GenePtrCompare);
 
-  list<Gene> filials;
-  list<Gene>::reverse_iterator rite = group_.rbegin();
+  list<GenePtr> filials;
+  list<GenePtr>::reverse_iterator rite = group_.rbegin();
   for (int i = 0; i < matenum; i += 2)
   {
-  	list<Gene>::reverse_iterator next = ++rite;
-    filials.push_back(rite->mate(*(next)));
+  	list<GenePtr>::reverse_iterator next = ++rite;
+    GenePtr curPtr = *rite;
+	GenePtr nextPtr = *next;
 
+	filials.push_back(GenePtr(new Gene(curPtr->mate(*nextPtr))));
+	
 	rite = ++next;
   }
 
   std::copy(filials.begin(), filials.end(), std::back_inserter(group_));
-  for (list<Gene>::iterator ite = group_.begin();
+  for (list<GenePtr>::iterator ite = group_.begin();
         ite != group_.end(); ++ite)
   {
-    ite->variation(varprob_);
+    (*ite)->variation(varprob_);
   }
-  group_.sort();
+  group_.sort(GenePtrCompare);
   for (int i = 0; i < (matenum / 2); i++)
   {
 	group_.erase(group_.begin());
@@ -82,16 +85,23 @@ void GeneticTsp::evolution()
 
 Gene GeneticTsp::bestGene()
 {
-  group_.sort();
+  group_.sort(GenePtrCompare);
 
-  return *(group_.rbegin());
+  return **(group_.rbegin());
 }
 
 void GeneticTsp::print()
 {
-  for (list<Gene>::iterator ite = group_.begin();
+  for (list<GenePtr>::iterator ite = group_.begin();
       ite != group_.end(); ++ite)
   {
-    ite->print();
+    (*ite)->print();
   }
 }
+
+bool GeneticTsp::GenePtrCompare(const GenePtr& lhs, const GenePtr& rhs)
+{
+  return *(lhs) < *(rhs);
+}
+
+
