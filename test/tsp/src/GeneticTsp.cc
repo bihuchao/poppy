@@ -22,27 +22,34 @@ void GeneticTsp::InitGroup()
 
   vector<Gene> allGenes;
   vector<int> tmp;
-  for (int i = 0; i < citynum; i++)
-  {
-    tmp.push_back(i);
+  
+  int i = 0;
+  while (i < initnum_)
+  {    
+    tmp.clear();
+    int j = 0;
+    while (j < citynum)
+    {
+      int item = ::rand() % citynum;
+      if (find(tmp.begin(), tmp.end(), item) == tmp.end())
+      {
+        tmp.push_back(item);
+        j++;
+      }
+    }
+
+    Gene newGene(tmp, &cities_);
+    if (find(allGenes.begin(), allGenes.end(), newGene) == allGenes.end())
+    {
+      allGenes.push_back(newGene);
+      i++;
+    }
   }
 
-  do
+  for (vector<Gene>::iterator ite = allGenes.begin();
+        ite != allGenes.end(); ++ite)
   {
-    allGenes.push_back(Gene(tmp,  &cities_));
-  } while(next_permutation(tmp.begin(), tmp.end()));
-
-  int i = 0;
-  tmp.clear();
-  while (i < initnum_ || tmp.size() >= allGenes.size())
-  {
-    int randidx = ::rand() % allGenes.size();
-    if (std::find(tmp.begin(), tmp.end(), randidx) == tmp.end())
-    {
-      group_.push_back(GenePtr(new Gene(allGenes[randidx])));
-      tmp.push_back(randidx);
-      ++i;
-    }
+    group_.push_back(GenePtr(new Gene(*ite)));
   }
 }
 
@@ -61,13 +68,13 @@ void GeneticTsp::evolution()
   list<GenePtr>::reverse_iterator rite = group_.rbegin();
   for (int i = 0; i < matenum; i += 2)
   {
-  	list<GenePtr>::reverse_iterator next = ++rite;
+    list<GenePtr>::reverse_iterator next = ++rite;
     GenePtr curPtr = *rite;
-	GenePtr nextPtr = *next;
+    GenePtr nextPtr = *next;
 
-	filials.push_back(GenePtr(new Gene(curPtr->mate(*nextPtr))));
-	
-	rite = ++next;
+    filials.push_back(GenePtr(new Gene(curPtr->mate(*nextPtr))));
+
+    rite = ++next;
   }
 
   std::copy(filials.begin(), filials.end(), std::back_inserter(group_));
@@ -79,7 +86,7 @@ void GeneticTsp::evolution()
   group_.sort(GenePtrCompare);
   for (int i = 0; i < (matenum / 2); i++)
   {
-	group_.erase(group_.begin());
+    group_.erase(group_.begin());
   }
 }
 

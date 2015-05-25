@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
   ::srand(static_cast<unsigned int>(::time(NULL)));
 
   std::vector<TspCity> cities;
-  for (int i = 0; i < 10; i++)
+  for (int i = 0; i < 100; i++)
   {
     int x = ::rand() % kScreenWidth;
     int y = ::rand() % kScreenHeight;
