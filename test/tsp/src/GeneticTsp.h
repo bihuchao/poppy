@@ -17,11 +17,13 @@ class GeneticTsp
    : cities_(cities), initnum_(initnum),
      varprob_(varprob), mateprob_(mateprob) { }
 
-  void InitGroup();
+  virtual void InitGroup();
   void evolution();
   Gene bestGene();
 
   void print();
+
+  virtual ~GeneticTsp() { }
 
   static bool GenePtrCompare(const GenePtr& lhs, const GenePtr& rhs);
  private:

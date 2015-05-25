@@ -72,7 +72,7 @@ void GeneticTsp::evolution()
     GenePtr curPtr = *rite;
     GenePtr nextPtr = *next;
 
-    filials.push_back(GenePtr(new Gene(curPtr->mate(*nextPtr))));
+    filials.push_back(curPtr->mate(*nextPtr));
 
     rite = ++next;
   }

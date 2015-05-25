@@ -21,7 +21,7 @@ void Gene::variation(double prob)
   std::swap(tspCityIdxs[pos1], tspCityIdxs[pos2]);
 }
 
-Gene Gene::mate(const Gene& rhs)
+Gene::GenePtr Gene::mate(const Gene& rhs)
 {
   assert(tspCityIdxs.size() == rhs.tspCityIdxs.size());
 
@@ -57,7 +57,7 @@ Gene Gene::mate(const Gene& rhs)
     *pos = rhs.tspCityIdxs[i];
   }
 
-  return Gene(filialIdxs, cities_);
+  return GenePtr(new Gene(filialIdxs, cities_));
 }
 
 double Gene::adaptiveValue() const

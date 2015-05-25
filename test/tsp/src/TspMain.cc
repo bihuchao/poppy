@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
   ::srand(static_cast<unsigned int>(::time(NULL)));
 
   std::vector<TspCity> cities;
-  for (int i = 0; i < 100; i++)
+  for (int i = 0; i < 16; i++)
   {
     int x = ::rand() % kScreenWidth;
     int y = ::rand() % kScreenHeight;
@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
     cities.push_back(TspCity(x, y));
   }
 
-  GeneticTsp tsp(cities, 100, 0.05, 0.5);
+  GeneticTsp tsp(cities, 1000, 0.05, 0.5);
   tsp.InitGroup();
 
   VideoSystemSDL videoSys;
