@@ -14,6 +14,7 @@
 #include "Gene.h"
 #include "TspCity.h"
 #include "GeneticTsp.h"
+#include "AStar.h"
 
 using namespace poppy;
 
@@ -41,6 +42,19 @@ int main(int argc, char *argv[])
   int height = 480;
 
   ::srand(static_cast<unsigned int>(::time(NULL)));
+
+  std::vector<std::vector<bool> > legal {
+    std::vector<bool> {0, 0, 0, 1, 1, 1, 1},
+    std::vector<bool> {1, 1, 1, 1, 0, 1, 0},
+    std::vector<bool> {1, 1, 1, 1, 1, 0, 0},
+    std::vector<bool> {1, 0, 0, 0, 0, 0, 0},
+    std::vector<bool> {1, 1, 1, 1, 1, 1, 1},
+  };
+  Point start(1, 5);
+  Point end(4, 5);
+  AStar *astar = new AStar(legal, start, end);
+  astar->getDistance();
+  astar->getPath();
 
   std::vector<TspCity> cities;
   for (int i = 0; i < 16; i++)
@@ -72,14 +86,13 @@ int main(int argc, char *argv[])
 
     if (SDL_PollEvent(&event))
     {
-      if (event.type == SDL_QUIT) 
+      if (event.type == SDL_QUIT)
       {
-        break; 
+        break;
       }
     }
   }
 
-  SDL_Quit();
   return 0;
 }
 

@@ -4,6 +4,7 @@ LINK_LIBS = video graphics 3dmath logger SDL
 
 OS := $(shell uname -s)
 IS_MINGW := $(shell echo $(OS)|grep -i MINGW)
+CFLAGS = -std=c++11
 
 ifdef IS_MINGW
 LINK_LIBS += mingw32 SDLmain SDL wsock32
